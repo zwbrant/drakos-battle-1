@@ -70,7 +70,7 @@ Material:
     - _EffectsLayer1Background: 1
     - _EffectsLayer1Enabled: 0
     - _EffectsLayer1Foreground: 1
-    - _EffectsLayer1MotionSpeed: -6
+    - _EffectsLayer1MotionSpeed: -9
     - _EffectsLayer1Rotation: 0
     - _EffectsLayer2Background: 1
     - _EffectsLayer2Foreground: 1
@@ -84,14 +84,14 @@ Material:
     - _EffectsLayer4MotionSpeed: 0
     - _EffectsLayer4Rotation: 0
     m_Colors:
-    - _EffectsLayer1Color: {r: 0.54016215, g: 0.14351194, b: 0.7075472, a: 0.4392157}
+    - _EffectsLayer1Color: {r: 0.54016215, g: 0.14351194, b: 0.7075472, a: 0.75686276}
     - _EffectsLayer1P3vot: {r: 0, g: 0, b: 0, a: 0}
     - _EffectsLayer1Pivot: {r: 0, g: 0, b: 0, a: 0}
     - _EffectsLayer1PivotScale: {r: 0.5, g: 0.5, b: 0, a: 1}
     - _EffectsLayer1Translation: {r: 4, g: 13, b: 0, a: 0}
     - _EffectsLayer2Color: {r: 0.60386276, g: 0, b: 1, a: 1}
     - _EffectsLayer2Pivot: {r: 0.5, g: 0.5, b: 0, a: 0}
-    - _EffectsLayer2PivotScale: {r: 0.5, g: 0.5, b: 1, a: 0.36}
+    - _EffectsLayer2PivotScale: {r: 0.5, g: 0.5, b: 1, a: 0.31}
     - _EffectsLayer2Translation: {r: -0.06, g: -0.38, b: 0, a: 0}
     - _EffectsLayer3Color: {r: 1, g: 1, b: 1, a: 1}
     - _EffectsLayer3Pivot: {r: 0.5, g: 0.5, b: 0, a: 0}
