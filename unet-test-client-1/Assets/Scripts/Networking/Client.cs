@@ -4,9 +4,10 @@ using UnityEngine;
 using UnityEngine.Networking;
 
 public class Client : MonoBehaviour {
-
     private const int PORT = 12345;
     private const string SERVER_IP = "127.0.0.1";
+
+    public UnityStringEvent NewCardDrawnEvent;
 
     private int _hostId;
     private byte _reliableChannel;
@@ -18,7 +19,7 @@ public class Client : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		
+
 	}
 
     public void Connnect()
@@ -54,5 +55,11 @@ public class Client : MonoBehaviour {
     public void OnConnectedToServer()
     {
         print("Connected to Server");
+    }
+
+    public void OnNewCardDrawn(string cardGuid)
+    {
+        Debug.Log("Drawing card " + cardGuid);
+        NewCardDrawnEvent.Invoke(cardGuid);
     }
 }
