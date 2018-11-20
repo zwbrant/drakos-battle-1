@@ -1,0 +1,6 @@
+{
+	"name": "Headless Fish Spirit",
+	"spriteFile": "headlessFish",
+	"energyCost": "4",
+	"attackPower": "9"
+}

@@ -1,0 +1,6 @@
+{
+	"name": "Ancient Tortoise",
+	"spriteFile": "ancientTortoise",
+	"energyCost": "2",
+	"attackPower": "4"
+}

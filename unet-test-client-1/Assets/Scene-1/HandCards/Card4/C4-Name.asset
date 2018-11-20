@@ -8,6 +8,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a6dc08ea2d77fab41bd7bc6d6b4f117e, type: 3}
-  m_Name: CardDrawnEvent
+  m_Script: {fileID: 11500000, guid: e42bcb6da50f06c40ad7bc68994ead3b, type: 3}
+  m_Name: C4-Name
   m_EditorClassIdentifier: 
+  value: 

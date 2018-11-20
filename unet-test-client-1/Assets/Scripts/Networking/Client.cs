@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.Networking;
 
 public class Client : MonoBehaviour {
@@ -8,6 +9,7 @@ public class Client : MonoBehaviour {
     private const string SERVER_IP = "127.0.0.1";
 
     public UnityStringEvent NewCardDrawnEvent;
+    public UnityEvent RandomCardDrawnEvent;
 
     private int _hostId;
     private byte _reliableChannel;
@@ -61,5 +63,11 @@ public class Client : MonoBehaviour {
     {
         Debug.Log("Drawing card " + cardGuid);
         NewCardDrawnEvent.Invoke(cardGuid);
+    }
+
+    public void OnNewRandomCardDrawn()
+    {
+        Debug.Log("Drawing random card");
+        RandomCardDrawnEvent.Invoke();
     }
 }

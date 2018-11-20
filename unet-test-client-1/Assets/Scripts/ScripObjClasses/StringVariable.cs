@@ -10,7 +10,7 @@ using UnityEngine;
 namespace RoboRyanTron.Unite2017.Variables
 {
     [CreateAssetMenu]
-    public class StringVariable : ScriptableObject
+    public class StringVariable : PrintableScriptObj
     {
         [SerializeField]
         private string value = "";
@@ -19,6 +19,11 @@ namespace RoboRyanTron.Unite2017.Variables
         {
             get { return value; }
             set { this.value = value; }
+        }
+
+        public override string ToString()
+        {
+            return Value;
         }
     }
 }

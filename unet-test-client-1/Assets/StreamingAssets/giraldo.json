@@ -1,0 +1,6 @@
+{
+	"name": "Giraldo the Giant",
+	"spriteFile": "giraldo",
+	"energyCost": "2",
+	"attackPower": "5"
+}

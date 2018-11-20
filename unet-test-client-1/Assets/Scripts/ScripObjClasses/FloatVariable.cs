@@ -10,7 +10,7 @@ using UnityEngine;
 namespace RoboRyanTron.Unite2017.Variables
 {
     [CreateAssetMenu]
-    public class FloatVariable : ScriptableObject
+    public class FloatVariable : PrintableScriptObj
     {
 #if UNITY_EDITOR
         [Multiline]
@@ -36,6 +36,11 @@ namespace RoboRyanTron.Unite2017.Variables
         public void ApplyChange(FloatVariable amount)
         {
             Value += amount.Value;
+        }
+
+        public override string ToString()
+        {
+            return Value.ToString();
         }
     }
 }

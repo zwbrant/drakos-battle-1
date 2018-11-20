@@ -14,20 +14,21 @@ namespace RoboRyanTron.Unite2017.Variables
     {
         public Text Text;
 
-        public StringVariable Variable;
+        [SerializeField]
+        public PrintableScriptObj Variable;
 
         public bool AlwaysUpdate;
         
         private void OnEnable()
         {
-            Text.text = Variable.Value;
+            Text.text = Variable.ToString();
         }
 
         private void Update()
         {
             if (AlwaysUpdate)
             {
-                Text.text = Variable.Value;
+                Text.text = Variable.ToString();
             }
         }
     }
