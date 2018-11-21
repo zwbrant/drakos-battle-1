@@ -2,6 +2,8 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
+using System.Runtime.Serialization.Formatters.Binary;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.Networking;
@@ -14,18 +16,24 @@ public class Client : MonoBehaviour {
     public UnityStringEvent NewCardDrawnEvent;
     public UnityEvent RandomCardDrawnEvent;
 
+    public bool IsOnline { get; private set; }
+
+    public const int MSG_BYTE_SIZE = 1024;
+
     private int _hostId;
+    private int _connectionId;
     private byte _reliableChannel;
+    private byte _error;
 
     // Use this for initialization
     void Start () {
-		
+        IsOnline = false;
 	}
 	
 	// Update is called once per frame
 	void Update () {
-
-	}
+        UpdateMessagePump();
+    }
 
     public void Connnect()
     {
@@ -40,28 +48,76 @@ public class Client : MonoBehaviour {
 
         _hostId = NetworkTransport.AddHost(hostTopology, 0);
 
-        byte error;
-        NetworkTransport.Connect(_hostId, IPAddress.Value, int.Parse(Port.Value), 0, out error);
+        _connectionId = NetworkTransport.Connect(_hostId, IPAddress.Value, int.Parse(Port.Value), 0, out _error);
 
-        if ((NetworkError)error != NetworkError.Ok)
+        if ((NetworkError)_error != NetworkError.Ok)
         {
             //Output this message in the console with the Network Error
-            Debug.Log("There was this error : " + (NetworkError)error);
+            Debug.Log("There was this error : " + (NetworkError)_error);
         }
         //Otherwise if no errors occur, output this message to the console
         else
         {
-            Debug.Log("Connected : " + (NetworkError)error);
+            Debug.Log("Connected : " + (NetworkError)_error);
+            IsOnline = true;
+
             OnConnectedToServer();
         }
+    }
+
+    private void UpdateMessagePump()
+    {
+        if (!IsOnline)
+            return;
+
+        int recHostId;
+        int connectionId;
+        int channelId;
+        byte[] recBuffer = new byte[MSG_BYTE_SIZE];
+        int bufferSize = 1024;
+        int dataSize;
+
+        NetworkEventType networkEventType = NetworkTransport.Receive(out recHostId, out connectionId, out channelId, recBuffer, bufferSize, out dataSize, out _error);
+        switch (networkEventType)
+        {
+            case NetworkEventType.Nothing:
+                break;
+            case NetworkEventType.ConnectEvent:
+                Debug.Log(string.Format("Connected to game server", connectionId));
+                break;
+            case NetworkEventType.DisconnectEvent:
+                Debug.Log(string.Format("Disconnected from game server", connectionId));
+                break;
+            case NetworkEventType.DataEvent:
+                Debug.Log("Data");
+                break;
 
 
-
+            case NetworkEventType.BroadcastEvent:
+                Debug.Log("Unexpected Network Event");
+                break;
+        }
     }
 
     public void OnConnectedToServer()
     {
-        SceneManager.LoadScene(1);
+        //SceneManager.LoadScene(1);
+    }
+
+    public void SendToServer(NetMsg msg)
+    {
+        byte[] buffer = new byte[MSG_BYTE_SIZE];
+
+        BinaryFormatter formatter = new BinaryFormatter();
+        MemoryStream memStream = new MemoryStream(buffer);
+        formatter.Serialize(memStream, msg);
+
+        NetworkTransport.Send(_hostId, _connectionId, _reliableChannel, buffer, MSG_BYTE_SIZE, out _error);
+    }
+
+    public void SendCardDealtMsg()
+    {
+        SendToServer(new CardDealtMsg() { CardName = "Salmon Baby" });
     }
 
     public void OnNewCardDrawn(string cardGuid)

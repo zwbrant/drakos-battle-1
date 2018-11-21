@@ -1,5 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.IO;
+using System.Runtime.Serialization.Formatters.Binary;
 using UnityEngine;
 using UnityEngine.Networking;
 using UnityEngine.SceneManagement;
@@ -7,20 +9,23 @@ using UnityEngine.SceneManagement;
 public class Server : MonoBehaviour {
 
     private const int PORT = 12345;
-    private const int MSG_SIZE = 1024;
+    private const int MSG_BYTE_SIZE = 1024;
 
     private int _hostId;
     private byte _reliableChannel;
     private byte _error;
 
+    public bool IsOnline { get; private set; }
+
 
     // Use this for initialization
     void Start () {
-		
+        IsOnline = false;
 	}
 	
 	// Update is called once per frame
 	void Update () {
+        UpdateMessagePump();
 	}
 
     public void Init()
@@ -38,28 +43,79 @@ public class Server : MonoBehaviour {
 
         Debug.Log(string.Format("Opening port {0} on localhost", PORT.ToString()));
 
+        IsOnline = true;
     }
 
-    private void ReceiveMessage()
+    private void UpdateMessagePump()
     {
+        if (!IsOnline)
+            return;
+
         int recHostId;
         int connectionId;
         int channelId;
-        byte[] recBuffer = new byte[MSG_SIZE];
+        byte[] recBuffer = new byte[MSG_BYTE_SIZE];
         int bufferSize = 1024;
         int dataSize;
 
-        NetworkEventType recData = NetworkTransport.Receive(out recHostId, out connectionId, out channelId, recBuffer, bufferSize, out dataSize, out _error);
-        switch (recData)
+        NetworkEventType networkEventType = NetworkTransport.Receive(out recHostId, out connectionId, out channelId, recBuffer, bufferSize, out dataSize, out _error);
+        switch (networkEventType)
         {
-            case NetworkEventType.Nothing: break;
-            case NetworkEventType.ConnectEvent: break;
-            case NetworkEventType.DataEvent: break;
-            case NetworkEventType.DisconnectEvent: break;
+            case NetworkEventType.Nothing:
+                break;
+            case NetworkEventType.ConnectEvent:
+                Debug.Log(string.Format("User {0} has connected", connectionId));
+                break;
+            case NetworkEventType.DisconnectEvent:
+                Debug.Log(string.Format("User {0} has disconnected", connectionId));
+                break;
+            case NetworkEventType.DataEvent:
 
-            case NetworkEventType.BroadcastEvent:
+                NetMsg netMsg = DeserializeNetMsg(recBuffer);
+                OnNetMsgReceived(connectionId, channelId, recHostId, netMsg);
 
                 break;
+            case NetworkEventType.BroadcastEvent:
+                Debug.Log("Unexpected Network Event");
+                break;
         }
+    }
+
+    public void OnNetMsgReceived(int cnnId, int channelId, int hostId, NetMsg netMsg)
+    {
+        switch(netMsg.OP)
+        {
+            case NetOP.CardDealt:
+                Debug.Log("sda");
+                break;
+            default:
+                break;
+
+        }
+    }
+
+    public void SendToClient(int recHost, int cnnId, NetMsg msg)
+    {
+        byte[] buffer = SerializeNetMsg(msg);
+
+        NetworkTransport.Send(_hostId, cnnId, _reliableChannel, buffer, MSG_BYTE_SIZE, out _error);
+    }
+
+    public byte[] SerializeNetMsg(NetMsg netMsg)
+    {
+        byte[] buffer = new byte[MSG_BYTE_SIZE];
+
+        BinaryFormatter formatter = new BinaryFormatter();
+        MemoryStream memStream = new MemoryStream(buffer);
+        formatter.Serialize(memStream, netMsg);
+
+        return buffer;
+    }
+
+    public NetMsg DeserializeNetMsg(byte[] netMsgBuffer)
+    {
+        BinaryFormatter formatter = new BinaryFormatter();
+        MemoryStream memStream = new MemoryStream(netMsgBuffer);
+        return (NetMsg)formatter.Deserialize(memStream);
     }
 }

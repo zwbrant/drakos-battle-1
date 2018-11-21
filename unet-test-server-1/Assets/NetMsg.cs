@@ -9,7 +9,8 @@ public enum NetOP : byte
 }
 
 [System.Serializable]
-public abstract class NetMsg {
+public abstract class NetMsg
+{
 
     public NetOP OP { get; set; }
 
