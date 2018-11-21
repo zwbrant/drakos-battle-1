@@ -1,12 +1,15 @@
-﻿using System.Collections;
+﻿using RoboRyanTron.Unite2017.Variables;
+using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.Networking;
+using UnityEngine.SceneManagement;
 
 public class Client : MonoBehaviour {
-    private const int PORT = 12345;
-    private const string SERVER_IP = "127.0.0.1";
+    public StringVariable IPAddress;
+    public StringVariable Port;
 
     public UnityStringEvent NewCardDrawnEvent;
     public UnityEvent RandomCardDrawnEvent;
@@ -38,7 +41,7 @@ public class Client : MonoBehaviour {
         _hostId = NetworkTransport.AddHost(hostTopology, 0);
 
         byte error;
-        NetworkTransport.Connect(_hostId, SERVER_IP, PORT, 0, out error);
+        NetworkTransport.Connect(_hostId, IPAddress.Value, int.Parse(Port.Value), 0, out error);
 
         if ((NetworkError)error != NetworkError.Ok)
         {
@@ -46,17 +49,19 @@ public class Client : MonoBehaviour {
             Debug.Log("There was this error : " + (NetworkError)error);
         }
         //Otherwise if no errors occur, output this message to the console
-        else Debug.Log("Connected : " + (NetworkError)error);
+        else
+        {
+            Debug.Log("Connected : " + (NetworkError)error);
+            OnConnectedToServer();
+        }
 
 
-        int i = 55555555;
-        byte b = (byte)i;
-        print(b);
+
     }
 
     public void OnConnectedToServer()
     {
-        print("Connected to Server");
+        SceneManager.LoadScene(1);
     }
 
     public void OnNewCardDrawn(string cardGuid)

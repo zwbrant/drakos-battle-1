@@ -251,7 +251,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 96443fdbd498e134fb18314c5bfd04f5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  DisableOnStart: 1
   EnabledCards: {fileID: 11400000, guid: 1ee71435848324a449929e9c8d9ada07, type: 2}
   DisabledCards: {fileID: 11400000, guid: 048afe50879d9984abdd1748e48d0c74, type: 2}
   Name: {fileID: 114160537876465344}

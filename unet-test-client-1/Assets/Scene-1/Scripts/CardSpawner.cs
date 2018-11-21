@@ -4,23 +4,27 @@ using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
 
-public class CardSpawner : MonoBehaviour {
-    public HandCardSet DisabledCards;
-    public RectTransSet CardPlacements;
+public class CardSpawner : MonoBehaviour
+{
+    public HandCardSet EnabledCards;
+    public CardContainerSet HandCardContainers;
+    public Vector3 LocalSpawnPosition = Vector3.zero;
     public GameObject CardPF;
 
     public string CardPath { get; private set; }
 
-	// Use this for initialization
-	void Start () {
+    // Use this for initialization
+    void Start()
+    {
         CardPath = Application.streamingAssetsPath;
 
     }
-	
-	// Update is called once per frame
-	void Update () {
-		
-	}
+
+    // Update is called once per frame
+    void Update()
+    {
+
+    }
 
     public void SpawnRandomCard()
     {
@@ -30,24 +34,28 @@ public class CardSpawner : MonoBehaviour {
     public void SpawnCard(string cardName)
     {
         Card card = JsonUtilities.DeserializeCardFile(cardName);
-        //foreach(HandCardItem item in DisabledCards.SortFromLeftToRight())
-        //{
-        //    Debug.Log(item.gameObject.name);
-        //}
-        //SpawnCard(card);    
 
-        SpawnCard(card)
-;
+        SpawnCard(card);
     }
 
     public void SpawnCard(Card card)
     {
-        var cardObj = Instantiate(CardPF, CardPlacements.Items[3]);
+        // check if 
+        CardContainerItem container = HandCardContainers.GetFirstEmptyContainerFromLeft();
+        if (container == null)
+        {
+            Debug.Log("Can't spawn card - no empty containers");
+            return;
+        }
+
+        var cardObj = Instantiate(CardPF, container.transform);
+        cardObj.transform.localPosition = LocalSpawnPosition;
+
         HandCardItem cardItem = cardObj.GetComponent<HandCardItem>();
         cardItem.Initialize(card);
 
-
         cardItem.gameObject.SetActive(true);
+        cardItem.gameObject.name = "Card " + EnabledCards.Items.Count;
     }
 
     //public void SetupHandCardItem(HandCardItem cardItem, Card card)
@@ -63,10 +71,6 @@ public class CardSpawner : MonoBehaviour {
 
     //}
 
-    public HandCardItem GetHandCardFurthestLeft()
-    {
-        return DisabledCards.SortFromLeftToRight()[0];
-    }
 
     private Card DeserializeRandomCard()
     {

@@ -13,6 +13,7 @@ namespace RoboRyanTron.Unite2017.Variables
     public class TextReplacer : MonoBehaviour
     {
         public Text Text;
+        public InputField InputField;
 
         [SerializeField]
         public PrintableScriptObj Variable;
@@ -21,7 +22,10 @@ namespace RoboRyanTron.Unite2017.Variables
         
         private void OnEnable()
         {
+
             Text.text = Variable.ToString();
+            if (InputField != null)
+                InputField.text = Variable.ToString();
         }
 
         private void Update()
@@ -29,6 +33,8 @@ namespace RoboRyanTron.Unite2017.Variables
             if (AlwaysUpdate)
             {
                 Text.text = Variable.ToString();
+                if (InputField != null)
+                    InputField.text = Variable.ToString();
             }
         }
     }

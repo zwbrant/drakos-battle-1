@@ -5,10 +5,10 @@ using UnityEngine;
 using UnityEngine.UI;
 
 public class HandCardItem : MonoBehaviour {
-    public bool DisableOnStart = false;
-
     public HandCardSet EnabledCards;
     public HandCardSet DisabledCards;
+
+    public Card Card { get; private set; }
 
     public Text Name;
     public Image Sprite;
@@ -17,21 +17,20 @@ public class HandCardItem : MonoBehaviour {
 
     private void Start()
     {
-        if (DisableOnStart)
-            gameObject.SetActive(false);
+
     }
 
     public void Initialize(Card card)
     {
-        Name.text = card.name;
-        AttackPower.text = card.attackPower.ToString();
-        EnergyCost.text = card.energyCost.ToString();
+        Card = card;
 
-        string spritePath = "Textures/" + card.spriteFile + ".jpg";
+        Name.text = Card.name;
+        AttackPower.text = Card.attackPower.ToString();
+        EnergyCost.text = Card.energyCost.ToString();
 
-        Sprite.sprite = Resources.Load("Textures/witch") as Sprite;
+        string spritePath = "Textures/" + Card.spriteFile;
 
-        gameObject.SetActive(true);
+        Sprite.sprite = Resources.Load<Sprite>(spritePath);
     }
 
     private void OnEnable()
@@ -39,7 +38,6 @@ public class HandCardItem : MonoBehaviour {
         EnabledCards.Add(this);
 
         DisabledCards.Remove(this);
-
     }
 
     private void OnDisable()
