@@ -28,6 +28,7 @@ public class Client : MonoBehaviour {
     // Use this for initialization
     void Start () {
         IsOnline = false;
+
 	}
 	
 	// Update is called once per frame

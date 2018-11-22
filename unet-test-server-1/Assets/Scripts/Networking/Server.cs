@@ -15,6 +15,7 @@ public class Server : MonoBehaviour {
     private byte _reliableChannel;
     private byte _error;
 
+    public List<ServerClient> ServerClients { get; private set; }
     public bool IsOnline { get; private set; }
 
 
@@ -65,9 +66,11 @@ public class Server : MonoBehaviour {
                 break;
             case NetworkEventType.ConnectEvent:
                 Debug.Log(string.Format("User {0} has connected", connectionId));
+                ServerClients.Add(new ServerClient(connectionId));
                 break;
             case NetworkEventType.DisconnectEvent:
                 Debug.Log(string.Format("User {0} has disconnected", connectionId));
+                //ServerClients.Remove();
                 break;
             case NetworkEventType.DataEvent:
 
