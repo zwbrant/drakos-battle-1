@@ -142,6 +142,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   IPAddress: {fileID: 11400000, guid: 3d1cb87b5f6153747ad4066078118afd, type: 2}
   Port: {fileID: 11400000, guid: eb5ddd04855365f4f836a316c368f723, type: 2}
+  OnConnectedState: 0
+  GameStateEvent: {fileID: 11400000, guid: e4a2bbe4af3f8874dbef60273268769c, type: 2}
   NewCardDrawnEvent:
     m_PersistentCalls:
       m_Calls: []

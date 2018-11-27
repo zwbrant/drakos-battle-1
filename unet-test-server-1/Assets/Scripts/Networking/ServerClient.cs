@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ServerClient : MonoBehaviour {
+public class ServerClient {
     public int ConnectionId { get; private set; }
 
     public ServerClient(int connectionId)
@@ -10,3 +10,5 @@ public class ServerClient : MonoBehaviour {
         ConnectionId = connectionId;
     }
 }
+
+

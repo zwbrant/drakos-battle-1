@@ -5,7 +5,8 @@ using UnityEngine;
 public enum NetOP : byte
 {
     None,
-    CardDealt
+    CardDealt,
+    PlayersConnected
 }
 
 [System.Serializable]

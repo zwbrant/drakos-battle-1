@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
@@ -15,7 +16,8 @@ public class Server : MonoBehaviour {
     private byte _reliableChannel;
     private byte _error;
 
-    public List<ServerClient> ServerClients { get; private set; }
+    public ServerClient Player1 { get; private set; }
+    public ServerClient Player2 { get; private set; }
     public bool IsOnline { get; private set; }
 
 
@@ -65,17 +67,17 @@ public class Server : MonoBehaviour {
             case NetworkEventType.Nothing:
                 break;
             case NetworkEventType.ConnectEvent:
-                Debug.Log(string.Format("User {0} has connected", connectionId));
-                ServerClients.Add(new ServerClient(connectionId));
+                OnConnect(connectionId, channelId, recHostId);
                 break;
             case NetworkEventType.DisconnectEvent:
                 Debug.Log(string.Format("User {0} has disconnected", connectionId));
+                OnDisconnect(connectionId, channelId, recHostId);
                 //ServerClients.Remove();
                 break;
             case NetworkEventType.DataEvent:
 
-                NetMsg netMsg = DeserializeNetMsg(recBuffer);
-                OnNetMsgReceived(connectionId, channelId, recHostId, netMsg);
+                NetMsg netMsg = MsgSerializer.DeserializeNetMsg(recBuffer);
+                OnData(connectionId, channelId, recHostId, netMsg);
 
                 break;
             case NetworkEventType.BroadcastEvent:
@@ -84,7 +86,51 @@ public class Server : MonoBehaviour {
         }
     }
 
-    public void OnNetMsgReceived(int cnnId, int channelId, int hostId, NetMsg netMsg)
+    private void OnDisconnect(int connectionId, int channelId, int recHostId)
+    {
+        if (Player1 != null && Player1.ConnectionId == connectionId)
+        {
+            Player1 = null;
+        }
+
+        if (Player2 != null && Player2.ConnectionId == connectionId)
+        {
+            Player2 = null;
+        }
+    }
+
+    private bool AddNewPlayer(int cnnId)
+    {
+        if (Player1 != null && Player2 != null)
+        {
+            Debug.LogError("Can't add another player, there are already two connected");
+            return false;
+        }
+
+        if (Player1 == null) {
+            Player1 = new ServerClient(cnnId);
+        } else { 
+            Player2 = new ServerClient(cnnId);
+        }
+        return true;
+    }
+
+    public void OnConnect(int cnnId, int channelId, int hostId)
+    {
+        Debug.Log(string.Format("User {0} has connected", cnnId));
+
+        // succesfully added new player and both players are connected
+        if (AddNewPlayer(cnnId) && Player1 != null && Player2 != null)
+        {
+            PlayersConnectedMsg connectedMsg = new PlayersConnectedMsg();
+            SendToClient(Player1.ConnectionId, connectedMsg);
+            SendToClient(Player2.ConnectionId, connectedMsg);
+
+        }
+
+    }
+
+    public void OnData(int cnnId, int channelId, int hostId, NetMsg netMsg)
     {
         switch(netMsg.OP)
         {
@@ -97,28 +143,12 @@ public class Server : MonoBehaviour {
         }
     }
 
-    public void SendToClient(int recHost, int cnnId, NetMsg msg)
+    public void SendToClient(int cnnId, NetMsg msg)
     {
-        byte[] buffer = SerializeNetMsg(msg);
+        byte[] buffer = MsgSerializer.SerializeNetMsg(msg, MSG_BYTE_SIZE);
 
         NetworkTransport.Send(_hostId, cnnId, _reliableChannel, buffer, MSG_BYTE_SIZE, out _error);
     }
 
-    public byte[] SerializeNetMsg(NetMsg netMsg)
-    {
-        byte[] buffer = new byte[MSG_BYTE_SIZE];
 
-        BinaryFormatter formatter = new BinaryFormatter();
-        MemoryStream memStream = new MemoryStream(buffer);
-        formatter.Serialize(memStream, netMsg);
-
-        return buffer;
-    }
-
-    public NetMsg DeserializeNetMsg(byte[] netMsgBuffer)
-    {
-        BinaryFormatter formatter = new BinaryFormatter();
-        MemoryStream memStream = new MemoryStream(netMsgBuffer);
-        return (NetMsg)formatter.Deserialize(memStream);
-    }
 }

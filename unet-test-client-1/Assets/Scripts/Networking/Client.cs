@@ -13,6 +13,9 @@ public class Client : MonoBehaviour {
     public StringVariable IPAddress;
     public StringVariable Port;
 
+    public GameState OnConnectedState;
+    public GameStateEvent GameStateEvent;
+
     public UnityStringEvent NewCardDrawnEvent;
     public UnityEvent RandomCardDrawnEvent;
 
@@ -85,12 +88,15 @@ public class Client : MonoBehaviour {
                 break;
             case NetworkEventType.ConnectEvent:
                 Debug.Log(string.Format("Connected to game server", connectionId));
+                SceneManager.LoadScene("Battle");
                 break;
             case NetworkEventType.DisconnectEvent:
                 Debug.Log(string.Format("Disconnected from game server", connectionId));
                 break;
             case NetworkEventType.DataEvent:
-                Debug.Log("Data");
+                NetMsg netMsg = MsgSerializer.DeserializeNetMsg(recBuffer);
+
+                OnData(connectionId, channelId, recHostId, netMsg);
                 break;
 
 
@@ -100,9 +106,40 @@ public class Client : MonoBehaviour {
         }
     }
 
+    public void OnData(int cnnId, int channelId, int hostId, NetMsg netMsg)
+    {
+        switch (netMsg.OP)
+        {
+            case NetOP.CardDealt:
+                Debug.Log("Card Dealt Msg");
+                break;
+            case NetOP.PlayersConnected:
+                Debug.Log("Players connected");
+                GameStateEvent.Raise(GameState.SetupCards);
+                break;
+            default:
+                break;
+
+        }
+    }
+
+
     public void OnConnectedToServer()
     {
         //SceneManager.LoadScene(1);
+    }
+
+    private void OnLevelWasLoaded(int level)
+    {
+        string levelName = SceneManager.GetSceneByBuildIndex(level).name;
+        switch (levelName)
+        {
+            case "Battle":
+                GameStateEvent.Raise(OnConnectedState);
+                break;
+            default:
+                break;
+        }
     }
 
     public void SendToServer(NetMsg msg)
