@@ -16,7 +16,7 @@ public class CardSpawner : MonoBehaviour
     // Use this for initialization
     void Start()
     {
-        CardPath = Application.streamingAssetsPath;
+        CardPath = Application.streamingAssetsPath + "/Cards/";
 
     }
 

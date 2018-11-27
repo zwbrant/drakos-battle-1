@@ -1,0 +1,7 @@
+{
+	"name": "Medusa's Pet",
+	"spriteFile": "stoneStar",
+	"maxHp": "70"
+	"energyCapacity": "4",
+	"attackPower": "5"
+}

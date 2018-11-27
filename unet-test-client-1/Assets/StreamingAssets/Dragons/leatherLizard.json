@@ -1,0 +1,7 @@
+{
+	"name": "Leather Lizard",
+	"spriteFile": "leatherFire",
+	"maxHp": "40"
+	"energyCapacity": "4",
+	"attackPower": "7"
+}
