@@ -22,7 +22,7 @@ GameObject:
   - component: {fileID: 222494514618925456}
   - component: {fileID: 114739627080804780}
   m_Layer: 5
-  m_Name: loading2
+  m_Name: SpinningLoadIcon
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
