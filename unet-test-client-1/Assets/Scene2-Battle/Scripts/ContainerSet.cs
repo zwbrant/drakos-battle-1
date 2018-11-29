@@ -5,14 +5,14 @@ using System.Linq;
 using UnityEngine;
 
 [CreateAssetMenu]
-public class CardContainerSet : RuntimeSet<CardContainerItem> {
+public class ContainerSet : RuntimeSet<ContainerItem> {
 
-    public List<CardContainerItem> SortFromLeftToRight()
+    public List<ContainerItem> SortFromLeftToRight()
     {
         return Items.OrderBy(item => item.transform.position.x).ToList();
     }
 
-    public CardContainerItem GetFirstEmptyContainerFromLeft()
+    public ContainerItem GetFirstEmptyContainerFromLeft()
     {
         var items = Items.OrderBy(item => item.transform.position.x).Where(item => item.IsEmpty);
 

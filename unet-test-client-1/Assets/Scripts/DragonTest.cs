@@ -1,6 +1,6 @@
 ﻿
 [System.Serializable]
-public class Dragon {
+public class DragonTest {
     public string name;
     public string spriteFile;
     public int maxHp;

@@ -1,0 +1,18 @@
+
+        {
+          "slug": "summon-power-boost",
+          "name": "Summon Power Boost 1",
+          "description": "Summons get +1 Power when Attacking",
+          "cost": 0,
+          "cooldown": -1,
+          "chance": 1,
+          "target": "all",
+          "player": "friendly",
+          "type": "passive",
+          "action": {
+            "type": "power",
+            "mod": "add",
+            "trigger": "attack",
+            "value": 1
+          }
+        }

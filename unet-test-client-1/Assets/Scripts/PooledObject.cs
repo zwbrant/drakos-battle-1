@@ -11,4 +11,9 @@ public class PooledObject : MonoBehaviour
 
     }
 
+    public void ReturnToPool()
+    {
+        Pool.AddObject(this);
+    }
+
 }

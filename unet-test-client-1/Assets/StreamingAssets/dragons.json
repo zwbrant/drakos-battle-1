@@ -1,0 +1,198 @@
+[
+    {
+      "id": "fire-dragon",
+      "name": "Fire Dragon",
+      "level": 1,
+      "health": 2,
+      "attack": 5,
+      "attack_cost": 2,
+      "energy": 4,
+      "age": "juvenile",
+      "color": "red",
+      "spriteFile": "leatherFire",
+      "abilities": [
+        {
+          "slug": "summon-power-boost",
+          "name": "Summon Power Boost 1",
+          "description": "Summons get +1 Power when Attacking",
+          "cost": 0,
+          "cooldown": -1,
+          "chance": 1,
+          "target": "all",
+          "player": "friendly",
+          "type": "passive",
+          "action": {
+            "type": "power",
+            "mod": "add",
+            "trigger": "attack",
+            "value": 1
+          }
+        },
+        {
+          "slug": "give-summon-rage",
+          "name": "Give Summon Rage",
+          "description": "Give a Summon Rage",
+          "cost": 3,
+          "cooldown": 1,
+          "chance": 1,
+          "target": "slot",
+          "player": "friendly",
+          "type": "active",
+          "action": {
+            "type": "rage",
+            "mod": "set",
+            "trigger": "none",
+            "value": 0
+          }
+        },
+        {
+          "slug": "deal-3-damage-front",
+          "name": "Deal Damage Front Summon",
+          "description": "Deal 3 Damage to a Front Summon",
+          "cost": 1,
+          "cooldown": 1,
+          "chance": 1,
+          "target": "front",
+          "player": "enemy",
+          "type": "active",
+          "action": {
+            "type": "power",
+            "mod": "subtract",
+            "trigger": "none",
+            "value": 3
+          }
+        }
+      ]
+    },
+    {
+      "id": "rock-dragon",
+      "name": "Rock Dragon",
+      "level": 1,
+      "health": 50,
+      "attack": 5,
+      "attack_cost": 2,
+      "energy": 4,
+      "age": "juvenile",
+      "color": "green",
+      "spriteFile": "stoneStar",
+      "abilities": [
+        {
+          "slug": "summon-power-boost-defense",
+          "name": "Summon Power Boost Defending",
+          "description": "Summons get +1 Power when Defending",
+          "cost": 0,
+          "cooldown": -1,
+          "chance": 1,
+          "target": "all",
+          "player": "friendly",
+          "type": "passive",
+          "action": {
+            "type": "power",
+            "mod": "add",
+            "trigger": "defend",
+            "value": 1
+          }
+        },
+        {
+          "slug": "give-summon-shield",
+          "name": "Give Summon Shield",
+          "description": "Give a Summon Shield",
+          "cost": 3,
+          "cooldown": 2,
+          "chance": 1,
+          "target": "slot",
+          "player": "friendly",
+          "type": "active",
+          "action": {
+            "type": "shield",
+            "mod": "set",
+            "trigger": "none",
+            "value": 0
+          }
+        },
+        {
+          "slug": "create-rock-summon",
+          "name": "Create Rock Summon",
+          "description": "Create a Rock Summon with 5 Power in Back Row",
+          "cost": 2,
+          "cooldown": 3,
+          "chance": 1,
+          "target": "back",
+          "player": "friendly",
+          "type": "active",
+          "action": {
+            "type": "create",
+            "mod": "",
+            "trigger": "none",
+            "value": 1
+          }
+        }
+      ]
+    },
+    {
+      "id": "moss-dragon",
+      "name": "Moss Dragon",
+      "level": 1,
+      "health": 60,
+      "attack": 3,
+      "attack_cost": 2,
+      "energy": 4,
+      "age": "juvenile",
+      "color": "green",
+      "spriteFile": "greenMeany",
+      "abilities": [
+        {
+          "slug": "summon-power-boost-defense",
+          "name": "Summon Power Boost Defending",
+          "description": "Summons get +1 Power when Defending",
+          "cost": 0,
+          "cooldown": -1,
+          "chance": 1,
+          "target": "all",
+          "player": "friendly",
+          "type": "passive",
+          "action": {
+            "type": "power",
+            "mod": "add",
+            "trigger": "defend",
+            "value": 1
+          }
+        },
+        {
+          "slug": "give-summon-shield",
+          "name": "Give Summon Shield",
+          "description": "Give a Summon Shield",
+          "cost": 3,
+          "cooldown": 2,
+          "chance": 1,
+          "target": "slot",
+          "player": "friendly",
+          "type": "active",
+          "action": {
+            "type": "shield",
+            "mod": "set",
+            "trigger": "none",
+            "value": 0
+          }
+        },
+        {
+          "slug": "create-rock-summon",
+          "name": "Create Rock Summon",
+          "description": "Create a Rock Summon with 5 Power in Back Row",
+          "cost": 2,
+          "cooldown": 3,
+          "chance": 1,
+          "target": "back",
+          "player": "friendly",
+          "type": "active",
+          "action": {
+            "type": "create",
+            "mod": "",
+            "trigger": "none",
+            "value": 1
+          }
+        }
+      ]
+    }
+  ]
+

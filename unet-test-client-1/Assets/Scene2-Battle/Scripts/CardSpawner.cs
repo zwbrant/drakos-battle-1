@@ -7,7 +7,7 @@ using UnityEngine;
 public class CardSpawner : MonoBehaviour
 {
     public HandCardSet EnabledCards;
-    public CardContainerSet HandCardContainers;
+    public ContainerSet HandCardContainers;
     public Vector3 LocalSpawnPosition = Vector3.zero;
     public GameObject CardPF;
 
@@ -41,7 +41,7 @@ public class CardSpawner : MonoBehaviour
     public void SpawnCard(Card card)
     {
         // check if 
-        CardContainerItem container = HandCardContainers.GetFirstEmptyContainerFromLeft();
+        ContainerItem container = HandCardContainers.GetFirstEmptyContainerFromLeft();
         if (container == null)
         {
             Debug.Log("Can't spawn card - no empty containers");

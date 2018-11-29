@@ -6,7 +6,7 @@ public class ManagedBehaviour<T> : MonoBehaviour where T : ManagedBehaviour<T>
     public bool PersistentObject = true;
 
     private static T m_Instance = null;
-    public static T instance
+    public static T Instance
     {
         get
         {

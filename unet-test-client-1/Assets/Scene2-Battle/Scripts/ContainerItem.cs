@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CardContainerItem : MonoBehaviour
+public class ContainerItem : MonoBehaviour
 {
-    public CardContainerSet Set;
+    public ContainerSet Set;
 
     public bool IsEmpty
     {

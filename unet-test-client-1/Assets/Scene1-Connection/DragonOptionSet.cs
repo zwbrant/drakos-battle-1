@@ -1,8 +1,10 @@
-﻿using System.Collections;
+﻿using RoboRyanTron.Unite2017.Sets;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class DragonManager : MonoBehaviour {
+[CreateAssetMenu]
+public class DragonOptionSet : RuntimeSet<DragonOptionItem> {
 
 	// Use this for initialization
 	void Start () {

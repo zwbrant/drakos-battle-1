@@ -1,0 +1,25 @@
+{ 
+	"objects": [
+      	{
+            "type": "power",
+            "mod": "subtract",
+            "trigger": "none",
+            "value": 3
+        },
+      	{
+            "type": "power",
+            "mod": "subtract",
+            "trigger": "none",
+            "value": 3
+        },
+      	{
+            "type": "power",
+            "mod": "subtract",
+            "trigger": "none",
+            "value": 3
+        }
+        
+
+	]
+
+}
