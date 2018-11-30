@@ -12,6 +12,7 @@ public class ManagedBehaviour<T> : MonoBehaviour where T : ManagedBehaviour<T>
         {
             if (m_Instance == null)
             {
+                Debug.Log("Creating Instance");
                 m_Instance = (T)FindObjectOfType(typeof(T));
                 if (m_Instance == null)
                 {
@@ -40,6 +41,8 @@ public class ManagedBehaviour<T> : MonoBehaviour where T : ManagedBehaviour<T>
         }
         else if (m_Instance == null)
         {
+            if (PersistentObject)
+                DontDestroyOnLoad(gameObject);
             m_Instance = (T)this;
             Init();
         }

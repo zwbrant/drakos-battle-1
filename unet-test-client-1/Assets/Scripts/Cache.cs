@@ -15,7 +15,13 @@ public class Cache<T> : ManagedBehaviour<Cache<T>>
 
     public override void Init()
     {
-        if(!PathIsFolder)
+        Objects = new List<T>();
+        PopulateCache();
+    }
+
+    public void PopulateCache()
+    {
+        if (!PathIsFolder)
         {
             string filePath = Path.Combine(Application.streamingAssetsPath, JsonPathInStreamingAssets + ".json");
 
