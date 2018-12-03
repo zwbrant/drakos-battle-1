@@ -341,7 +341,23 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   EnabledItems: {fileID: 11400000, guid: a41c706626f02034e9745c27032cb089, type: 2}
-  DisaledItems: {fileID: 11400000, guid: 5d8ad87a7f24f3a4d83383d1124cc370, type: 2}
+  DisabledItems: {fileID: 11400000, guid: 5d8ad87a7f24f3a4d83383d1124cc370, type: 2}
+  DragonSelectedEvent:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 11400000, guid: b4c8fffa05a019647be19ddfa7828187, type: 2}
+        m_MethodName: Raise
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_TypeName: UnityStringEvent, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
   Name: {fileID: 114805066318783302}
   Sprite: {fileID: 114764599039030004}
   Hp: {fileID: 114153746719881510}
@@ -419,12 +435,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 80cd0aef02eaa554e872e958b88e1d5d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  SelectionEvent:
+  ClickedEvent:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 11400000, guid: 72748194e48f5e949b0629cc9a95925a, type: 2}
         m_MethodName: Raise
         m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 114121363657160060}
+        m_MethodName: RaiseDragonSelectedEvent
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine

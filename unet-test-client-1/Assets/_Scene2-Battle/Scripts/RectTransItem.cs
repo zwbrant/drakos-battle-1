@@ -4,7 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class RectTransItem : SetItem<RectTransform> {
+public class RectTransItem : ComponentItem<RectTransform> {
 
     public RectTransSet Set;
     public override RuntimeSet<RectTransform> SetProp {

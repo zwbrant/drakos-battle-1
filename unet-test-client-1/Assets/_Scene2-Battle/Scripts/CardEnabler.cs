@@ -16,7 +16,7 @@ public class CardEnabler : MonoBehaviour {
 		
 	}
 
-    public void OnGameStateChange(GameState state)
+    public void OnGameStateChange(ClientGameState state)
     {
         Debug.Log("State changed: " + state.ToString());
     } 
