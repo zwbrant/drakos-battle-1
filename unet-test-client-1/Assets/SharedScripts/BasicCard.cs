@@ -1,6 +1,6 @@
 ﻿
 [System.Serializable]
-public class Card {
+public class BasicCard {
     public string name;
     public string spriteFile;
     public int energyCost;

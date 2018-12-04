@@ -33,12 +33,12 @@ public class CardSpawner : MonoBehaviour
 
     public void SpawnCard(string cardName)
     {
-        Card card = JsonUtilities.DeserializeCardFile(cardName);
+        BasicCard card = JsonUtilities.DeserializeCardFile(cardName);
 
         SpawnCard(card);
     }
 
-    public void SpawnCard(Card card)
+    public void SpawnCard(BasicCard card)
     {
         // check if 
         ContainerItem container = HandCardContainers.GetFirstEmptyContainerFromLeft();
@@ -72,7 +72,7 @@ public class CardSpawner : MonoBehaviour
     //}
 
 
-    private Card DeserializeRandomCard()
+    private BasicCard DeserializeRandomCard()
     {
         string[] cardFiles = System.IO.Directory.GetFiles(CardPath, "*.json");
         //for (int i = 0; i < cardFiles.Length; i++)

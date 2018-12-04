@@ -7,9 +7,9 @@ using UnityEngine;
 
 public static class JsonUtilities {
 
-    public static Card DeserializeCardFile(string cardGuid)
+    public static BasicCard DeserializeCardFile(string cardGuid)
     {
-        Card loadedCard = new Card();
+        BasicCard loadedCard = new BasicCard();
 
         string filePath = Path.Combine(Application.streamingAssetsPath + "/Cards/", cardGuid + ".json");
         if (File.Exists(filePath))
@@ -17,7 +17,7 @@ public static class JsonUtilities {
             // Read the json from the file into a string
             string dataAsJson = File.ReadAllText(filePath);
             // Pass the json to JsonUtility, and tell it to create a GameData object from it
-            loadedCard = JsonUtility.FromJson<Card>(dataAsJson);
+            loadedCard = JsonUtility.FromJson<BasicCard>(dataAsJson);
 
             Debug.Log("Deserialized " + loadedCard.name);
 

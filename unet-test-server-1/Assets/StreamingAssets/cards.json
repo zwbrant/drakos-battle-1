@@ -1,0 +1,650 @@
+[
+  {
+    "id": 1,
+    "slug": "flowing-water",
+    "name": "Flowing Water",
+    "description": "Give all your units Evade 25%.",
+    "type": "buff",
+    "subtype": "water",
+    "cost": 1,
+    "color": "blue",
+    "power": 0,
+    "ability": {
+      "slug": "all-evade",
+      "name": "All Evade",
+      "description": "Give all your units Evade 25%",
+      "cost": 0,
+      "cooldown": -1,
+      "chance": 1,
+      "target": "all",
+      "player": "friendly",
+      "type": "passive",
+      "action": {
+        "type": "evade",
+        "mod": "set",
+        "trigger": "none",
+        "value": 0.25
+      }
+    }
+  },
+  {
+    "id": 2,
+    "slug": "cold-breath",
+    "name": "Cold Breath",
+    "description": "Freeze all opponent's units",
+    "type": "buff",
+    "subtype": "ice",
+    "cost": 4,
+    "color": "blue",
+    "power": 0,
+    "ability": {
+      "slug": "freeze-all",
+      "name": "Freeze All",
+      "description": "Freeze all opponent's units",
+      "cost": 0,
+      "cooldown": -1,
+      "chance": 1,
+      "target": "all",
+      "player": "enemy",
+      "type": "passive",
+      "action": {
+        "type": "freeze",
+        "mod": "set",
+        "trigger": "none",
+        "value": 0
+      }
+    }
+  },
+  {
+    "id": 3,
+    "slug": "crushing-waves",
+    "name": "Crushing Waves",
+    "description": "Move opponents front row units to back row (if open).",
+    "type": "buff",
+    "subtype": "water",
+    "cost": 3,
+    "color": "blue",
+    "power": 0,
+    "ability": {
+      "slug": "move-to-back",
+      "name": "Move to Back",
+      "description": "Move opponents front row units to back row (if open)",
+      "cost": 0,
+      "cooldown": -1,
+      "chance": 1,
+      "target": "front",
+      "player": "enemy",
+      "type": "passive",
+      "action": {
+        "type": "move",
+        "mod": "back",
+        "trigger": "none",
+        "value": 0
+      }
+    }
+  },
+  {
+    "id": 4,
+    "slug": "ice-faerie",
+    "name": "Ice Faerie",
+    "description": "",
+    "type": "unit",
+    "subtype": "ice",
+    "cost": 1,
+    "color": "blue",
+    "power": 4,
+    "ability": null
+  },
+  {
+    "id": 5,
+    "slug": "freezing-wisp",
+    "name": "Freezing Wisp",
+    "description": "",
+    "type": "unit",
+    "subtype": "ice",
+    "cost": 2,
+    "color": "blue",
+    "power": 5,
+    "ability": {
+      "slug": "freeze",
+      "name": "Freeze",
+      "description": "FREEZE: Freezes enemy units after attacking.",
+      "cost": 0,
+      "cooldown": -1,
+      "chance": 1,
+      "target": "defender",
+      "player": "enemy",
+      "type": "passive",
+      "action": {
+        "type": "freeze",
+        "mod": "set",
+        "trigger": "attack",
+        "value": 0
+      }
+    }
+  },
+  {
+    "id": 6,
+    "slug": "yeti",
+    "name": "Yeti",
+    "description": "",
+    "type": "unit",
+    "subtype": "ice",
+    "cost": 3,
+    "color": "blue",
+    "power": 10,
+    "ability": {
+      "slug": "freeze",
+      "name": "Freeze",
+      "description": "FREEZE: Freezes enemy units after attacking.",
+      "cost": 0,
+      "cooldown": -1,
+      "chance": 1,
+      "target": "defender",
+      "player": "enemy",
+      "type": "passive",
+      "action": {
+        "type": "freeze",
+        "mod": "set",
+        "trigger": "attack",
+        "value": 0
+      }
+    }
+  },
+  {
+    "id": 7,
+    "slug": "serpent",
+    "name": "Serpent",
+    "description": "",
+    "type": "unit",
+    "subtype": "water",
+    "cost": 1,
+    "color": "blue",
+    "power": 3,
+    "ability": {
+      "slug": "evade",
+      "name": "Evade",
+      "description": "Evade: Evade 25% chance",
+      "cost": 0,
+      "cooldown": -1,
+      "chance": 1,
+      "target": "self",
+      "player": "friendly",
+      "type": "passive",
+      "action": {
+        "type": "evade",
+        "mod": "set",
+        "trigger": "none",
+        "value": 0.25
+      }
+    }
+  },
+  {
+    "id": 8,
+    "slug": "frog",
+    "name": "Frog",
+    "description": "",
+    "type": "unit",
+    "subtype": "water",
+    "cost": 1,
+    "color": "blue",
+    "power": 4,
+    "ability": null
+  },
+  {
+    "id": 9,
+    "slug": "giant-mosquito",
+    "name": "Giant Mosquito",
+    "description": "",
+    "type": "unit",
+    "subtype": "water",
+    "cost": 2,
+    "color": "blue",
+    "power": 6,
+    "ability": {
+      "slug": "evade",
+      "name": "Evade",
+      "description": "Evade: Evade 25% chance",
+      "cost": 0,
+      "cooldown": -1,
+      "chance": 1,
+      "target": "self",
+      "player": "friendly",
+      "type": "passive",
+      "action": {
+        "type": "evade",
+        "mod": "set",
+        "trigger": "none",
+        "value": 0.25
+      }
+    }
+  },
+  {
+    "id": 10,
+    "slug": "big-fish",
+    "name": "Big Fish",
+    "description": "",
+    "type": "unit",
+    "subtype": "water",
+    "cost": 2,
+    "color": "blue",
+    "power": 8,
+    "ability": null
+  },
+  {
+    "id": 11,
+    "slug": "overwhelm",
+    "name": "Overwhelm",
+    "description": "Give all your units 5 power.",
+    "type": "buff",
+    "subtype": "forest",
+    "cost": 3,
+    "color": "green",
+    "power": 0,
+    "ability": {
+      "slug": "all-5-power",
+      "name": "All 5 Power",
+      "description": "Give all your units 5 power.",
+      "cost": 0,
+      "cooldown": -1,
+      "chance": 1,
+      "target": "all",
+      "player": "friendly",
+      "type": "passive",
+      "action": {
+        "type": "power",
+        "mod": "add",
+        "trigger": "none",
+        "value": 5
+      }
+    }
+  },
+  {
+    "id": 12,
+    "slug": "vines",
+    "name": "Vines",
+    "description": "",
+    "type": "unit",
+    "subtype": "forest",
+    "cost": 1,
+    "color": "green",
+    "power": 3,
+    "ability": {
+      "slug": "grow",
+      "name": "Grow",
+      "description": "GROW: Gain 1 power at the end of every turn (including opponent's turn).",
+      "cost": 0,
+      "cooldown": -1,
+      "chance": 1,
+      "target": "self",
+      "player": "friendly",
+      "type": "passive",
+      "action": {
+        "type": "power",
+        "mod": "add",
+        "trigger": "end-turn",
+        "value": 1
+      }
+    }
+  },
+  {
+    "id": 13,
+    "slug": "venus-flytrap",
+    "name": "Venus Flytrap",
+    "description": "",
+    "type": "unit",
+    "subtype": "forest",
+    "cost": 1,
+    "color": "green",
+    "power": 5,
+    "ability": null
+  },
+  {
+    "id": 14,
+    "slug": "panther",
+    "name": "Panther",
+    "description": "",
+    "type": "unit",
+    "subtype": "forest",
+    "cost": 2,
+    "color": "green",
+    "power": 9,
+    "ability": null
+  },
+  {
+    "id": 15,
+    "slug": "titan",
+    "name": "Titan",
+    "description": "",
+    "type": "unit",
+    "subtype": "forest",
+    "cost": 3,
+    "color": "green",
+    "power": 12,
+    "ability": {
+      "slug": "grow",
+      "name": "Grow",
+      "description": "GROW: Gain 1 power at the end of every turn (including opponent's turn).",
+      "cost": 0,
+      "cooldown": -1,
+      "chance": 1,
+      "target": "self",
+      "player": "friendly",
+      "type": "passive",
+      "action": {
+        "type": "power",
+        "mod": "add",
+        "trigger": "end-turn",
+        "value": 1
+      }
+    }
+  },
+  {
+    "id": 16,
+    "slug": "lizard",
+    "name": "Lizard",
+    "description": "",
+    "type": "unit",
+    "subtype": "rock",
+    "cost": 1,
+    "color": "green",
+    "power": 4,
+    "ability": {
+      "slug": "shield",
+      "name": "Shield unit Ability",
+      "description": "SHIELD: Ignore all damage the first time damage would be taken, then shield is removed.",
+      "cost": 0,
+      "cooldown": -1,
+      "chance": 1,
+      "target": "self",
+      "player": "friendly",
+      "type": "passive",
+      "action": {
+        "type": "shield",
+        "mod": "set",
+        "trigger": "none",
+        "value": 0
+      }
+    }
+  },
+  {
+    "id": 17,
+    "slug": "snake",
+    "name": "Snake",
+    "description": "",
+    "type": "unit",
+    "subtype": "rock",
+    "cost": 1,
+    "color": "green",
+    "power": 5,
+    "ability": null
+  },
+  {
+    "id": 18,
+    "slug": "golem",
+    "name": "Golem",
+    "description": "",
+    "type": "unit",
+    "subtype": "rock",
+    "cost": 2,
+    "color": "green",
+    "power": 7,
+    "ability": {
+      "slug": "shield",
+      "name": "Shield unit Ability",
+      "description": "SHIELD: Ignore all damage the first time damage would be taken, then shield is removed.",
+      "cost": 0,
+      "cooldown": -1,
+      "chance": 1,
+      "target": "self",
+      "player": "friendly",
+      "type": "passive",
+      "action": {
+        "type": "shield",
+        "mod": "set",
+        "trigger": "none",
+        "value": 0
+      }
+    }
+  },
+  {
+    "id": 19,
+    "slug": "balor",
+    "name": "Balor",
+    "description": "",
+    "type": "unit",
+    "subtype": "rock",
+    "cost": 2,
+    "color": "green",
+    "power": 9,
+    "ability": null
+  },
+  {
+    "id": 20,
+    "slug": "basilisk",
+    "name": "Basilisk",
+    "description": "",
+    "type": "unit",
+    "subtype": "rock",
+    "cost": 3,
+    "color": "green",
+    "power": 15,
+    "ability": null
+  },
+  {
+    "id": 21,
+    "slug": "rain-fire",
+    "name": "Rain Fire",
+    "description": "Do 3 damage to all opponent units.",
+    "type": "buff",
+    "subtype": "fire",
+    "cost": 1,
+    "color": "red",
+    "power": 0,
+    "ability": {
+      "slug": "rain-fire",
+      "name": "3 damage to opponent units",
+      "description": "Do 3 damage to all opponent units.",
+      "cost": 0,
+      "cooldown": -1,
+      "chance": 1,
+      "target": "all",
+      "player": "enemy",
+      "type": "passive",
+      "action": {
+        "type": "power",
+        "mod": "subtract",
+        "trigger": "none",
+        "value": 3
+      }
+    }
+  },
+  {
+    "id": 22,
+    "slug": "thunder-storm",
+    "name": "Thunder Storm",
+    "description": "Kill all front row units (including yours)",
+    "type": "buff",
+    "subtype": "lightning",
+    "cost": 2,
+    "color": "red",
+    "power": 0,
+    "ability": {
+      "slug": "kill-all-front",
+      "name": "Kill All Front",
+      "description": "Kill all Front Row Units",
+      "cost": 0,
+      "cooldown": -1,
+      "chance": 1,
+      "target": "front",
+      "player": "both",
+      "type": "passive",
+      "action": {
+        "type": "power",
+        "mod": "set",
+        "trigger": "none",
+        "value": 0
+      }
+    }
+  },
+  {
+    "id": 23,
+    "slug": "flameling",
+    "name": "Flameling",
+    "description": "",
+    "type": "unit",
+    "subtype": "fire",
+    "cost": 1,
+    "color": "red",
+    "power": 4,
+    "ability": null
+  },
+  {
+    "id": 24,
+    "slug": "spider",
+    "name": "Spider",
+    "description": "",
+    "type": "unit",
+    "subtype": "fire",
+    "cost": 1,
+    "color": "red",
+    "power": 3,
+    "ability": {
+      "slug": "rage",
+      "name": "Rage",
+      "description": "RAGE: This unit attacks twice.",
+      "cost": 0,
+      "cooldown": -1,
+      "chance": 1,
+      "target": "self",
+      "player": "friendly",
+      "type": "passive",
+      "action": {
+        "type": "rage",
+        "mod": "set",
+        "trigger": "none",
+        "value": 0
+      }
+    }
+  },
+  {
+    "id": 25,
+    "slug": "flame-serpent",
+    "name": "Flame Serpent",
+    "description": "",
+    "type": "unit",
+    "subtype": "fire",
+    "cost": 2,
+    "color": "red",
+    "power": 8,
+    "ability": null
+  },
+  {
+    "id": 26,
+    "slug": "hydra",
+    "name": "Hydra",
+    "description": "",
+    "type": "unit",
+    "subtype": "fire",
+    "cost": 2,
+    "color": "red",
+    "power": 6,
+    "ability": {
+      "slug": "rage",
+      "name": "Rage",
+      "description": "RAGE: This unit attacks twice.",
+      "cost": 0,
+      "cooldown": -1,
+      "chance": 1,
+      "target": "self",
+      "player": "friendly",
+      "type": "passive",
+      "action": {
+        "type": "rage",
+        "mod": "set",
+        "trigger": "none",
+        "value": 0
+      }
+    }
+  },
+  {
+    "id": 27,
+    "slug": "living-lightning",
+    "name": "Living Lightning",
+    "description": "",
+    "type": "unit",
+    "subtype": "lightning",
+    "cost": 1,
+    "color": "red",
+    "power": 4,
+    "ability": null
+  },
+  {
+    "id": 28,
+    "slug": "forked-lightning",
+    "name": "Forked Lightning",
+    "description": "",
+    "type": "unit",
+    "subtype": "lightning",
+    "cost": 2,
+    "color": "red",
+    "power": 5,
+    "ability": {
+      "slug": "shock",
+      "name": "Shock unit ability",
+      "description": "SHOCK: Damages attacking units when defending.",
+      "cost": 0,
+      "cooldown": -1,
+      "chance": 1,
+      "target": "self",
+      "player": "friendly",
+      "type": "passive",
+      "action": {
+        "type": "shock",
+        "mod": "set",
+        "trigger": "none",
+        "value": 0
+      }
+    }
+  },
+  {
+    "id": 29,
+    "slug": "thunderbird",
+    "name": "Thunderbird",
+    "description": "",
+    "type": "unit",
+    "subtype": "lightning",
+    "cost": 3,
+    "color": "red",
+    "power": 9,
+    "ability": {
+      "slug": "shock",
+      "name": "Shock unit ability",
+      "description": "SHOCK: Damages attacking units when defending.",
+      "cost": 0,
+      "cooldown": -1,
+      "chance": 1,
+      "target": "self",
+      "player": "friendly",
+      "type": "passive",
+      "action": {
+        "type": "shock",
+        "mod": "set",
+        "trigger": null,
+        "value": 0
+      }
+    }
+  },
+  {
+    "id": 30,
+    "slug": "lightning-djinn",
+    "name": "Lightning Djinn",
+    "description": "",
+    "type": "unit",
+    "subtype": "lightning",
+    "cost": 3,
+    "color": "red",
+    "power": 15,
+    "ability": null
+  }
+]

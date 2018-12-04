@@ -6,58 +6,34 @@ using UnityEngine.Events;
 
 public class GameStateEventListener : MonoBehaviour
 {
-    [Tooltip("Event to register with.")]
-    public GameStateEvent Event;
+    public GameStateEvent GameStateEvent;
 
-    [Tooltip("Response to invoke when Event is raised.")]
-    public UnityGameStateEvent DynamicResponse;
-    public UnityEvent AwaitingPlayerResponse;
-    public UnityEvent SetupCardsResponse;
-    public UnityEvent UserSetupReadyResponse;
-    public UnityEvent UserTurnResponse;
-    public UnityEvent UserAttackResponse;
-    public UnityEvent OpponentTurnResponse;
-    public UnityEvent OpponentAttackResponse;
+    [Tooltip("The state TargetStateResponse will be invoked by.")]
+    public ClientGameState TargetState;
+    public UnityGameStateEvent TargetStateResponse;
+
+    [Tooltip("All other states will invoke this response")]
+    public UnityGameStateEvent OtherStatesResponse;
 
 
     private void OnEnable()
     {
-        Event.RegisterListener(this);
+        if (GameStateEvent != null)
+            GameStateEvent.RegisterListener(this);
     }
 
     private void OnDisable()
     {
-        Event.UnregisterListener(this);
+        if (GameStateEvent != null)
+            GameStateEvent.UnregisterListener(this);
     }
 
     public virtual void OnEventRaised(ClientGameState state)
     {
-        DynamicResponse.Invoke(state);
-
-        switch (state)
-        {
-            case ClientGameState.AwaitingOpponentJoin:
-                AwaitingPlayerResponse.Invoke();
-                break;
-            case ClientGameState.CardSetup:
-                SetupCardsResponse.Invoke();
-                break;
-            case ClientGameState.PlayerSetupReady:
-                UserSetupReadyResponse.Invoke();
-                break;
-            case ClientGameState.PlayerTurn:
-                UserTurnResponse.Invoke();
-                break;
-            case ClientGameState.PlayerAttack:
-                UserAttackResponse.Invoke();
-                break;
-            case ClientGameState.OpponentTurn:
-                OpponentTurnResponse.Invoke();
-                break;
-            case ClientGameState.OpponentAttack:
-                OpponentAttackResponse.Invoke();
-                break;
-        }
+        if (state == TargetState)
+            TargetStateResponse.Invoke(state);
+        else
+            OtherStatesResponse.Invoke(state);
     }
 
 }

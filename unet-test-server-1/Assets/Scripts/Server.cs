@@ -81,14 +81,14 @@ public class Server : ManagedBehaviour<Server> {
         }
     }
 
-    private void OnDisconnect(int connectionId, int channelId, int recHostId)
+    private void OnDisconnect(int cnnId, int channelId, int recHostId)
     {
-        if (CurrentGame.Player1 != null && CurrentGame.Player1.ConnectionId == connectionId)
+        if (CurrentGame.Player1 != null && CurrentGame.Player1.ConnectionId == cnnId)
         {
             CurrentGame.Player1 = null;
         }
 
-        if (CurrentGame.Player2 != null && CurrentGame.Player2.ConnectionId == connectionId)
+        if (CurrentGame.Player2 != null && CurrentGame.Player2.ConnectionId == cnnId)
         {
             CurrentGame.Player2 = null;
         }

@@ -6,7 +6,8 @@ public enum NetOP : byte
 {
     None,
     CardDealt,
-    PlayersConnected
+    PlayersConnected,
+    InitGameBoard
 }
 
 [System.Serializable]

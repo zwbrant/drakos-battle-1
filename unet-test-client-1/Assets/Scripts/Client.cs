@@ -16,9 +16,6 @@ public class Client : ManagedBehaviour<Client> {
     public ClientGameState OnConnectedState;
     public GameStateEvent GameStateEvent;
 
-    public UnityStringEvent NewCardDrawnEvent;
-    public UnityEvent RandomCardDrawnEvent;
-
     public bool IsOnline { get; private set; }
 
     public const int MSG_BYTE_SIZE = 1024;
@@ -158,16 +155,5 @@ public class Client : ManagedBehaviour<Client> {
         SendToServer(new CardDealtMsg() { CardName = "Salmon Baby" });
     }
 
-    public void OnNewCardDrawn(string cardGuid)
-    {
-        Debug.Log("Drawing card " + cardGuid);
-        NewCardDrawnEvent.Invoke(cardGuid);
-    }
-
-    public void OnNewRandomCardDrawn()
-    {
-        Debug.Log("Drawing random card");
-        RandomCardDrawnEvent.Invoke();
-    }
 
 }

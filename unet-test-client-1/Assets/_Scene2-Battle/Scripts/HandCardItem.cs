@@ -8,7 +8,7 @@ public class HandCardItem : MonoBehaviour {
     public HandCardSet EnabledCards;
     public HandCardSet DisabledCards;
 
-    public Card Card { get; private set; }
+    public BasicCard Card { get; private set; }
 
     public Text Name;
     public Image Sprite;
@@ -20,7 +20,7 @@ public class HandCardItem : MonoBehaviour {
 
     }
 
-    public void Initialize(Card card)
+    public void Initialize(BasicCard card)
     {
         Card = card;
 

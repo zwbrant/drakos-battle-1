@@ -3,8 +3,6 @@ using System.Collections;
 
 public class ManagedBehaviour<T> : MonoBehaviour where T : ManagedBehaviour<T>
 {
-    public bool PersistentObject = true;
-
     private static T m_Instance = null;
     public static T Instance
     {
@@ -20,8 +18,6 @@ public class ManagedBehaviour<T> : MonoBehaviour where T : ManagedBehaviour<T>
                 }
                 m_Instance.Init();
 
-                if (m_Instance.PersistentObject)
-                    DontDestroyOnLoad(m_Instance.gameObject);
             }
             return m_Instance;
         }
@@ -41,8 +37,6 @@ public class ManagedBehaviour<T> : MonoBehaviour where T : ManagedBehaviour<T>
         }
         else if (m_Instance == null)
         {
-            if (PersistentObject)
-                DontDestroyOnLoad(gameObject);
             m_Instance = (T)this;
             Init();
         }
