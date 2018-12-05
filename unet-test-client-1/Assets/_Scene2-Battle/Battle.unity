@@ -266,48 +266,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Set: {fileID: 11400000, guid: cab5819d545bf334ebe0c6388a3f123d, type: 2}
---- !u!1 &584339607
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 584339610}
-  - component: {fileID: 584339608}
-  m_Layer: 0
-  m_Name: CardEnabler
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &584339608
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 584339607}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ca9de97688408a048b01e143a61ec1ff, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  EnabledHandCards: {fileID: 11400000, guid: 1ee71435848324a449929e9c8d9ada07, type: 2}
-  DisabledHandCards: {fileID: 11400000, guid: 048afe50879d9984abdd1748e48d0c74, type: 2}
---- !u!4 &584339610
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 584339607}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 408.0482, y: 191.63863, z: 1.1275336}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 4
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &625979545
 GameObject:
   m_ObjectHideFlags: 0
@@ -686,11 +644,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &899582531 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 1484271892989992, guid: ab616e872cbc5424e8dbbb9e90fb4cec,
-    type: 2}
-  m_PrefabInternal: {fileID: 1094557686}
 --- !u!224 &899582532 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 224559376791775138, guid: ab616e872cbc5424e8dbbb9e90fb4cec,
@@ -881,7 +834,7 @@ RectTransform:
   - {fileID: 625979546}
   - {fileID: 802928355}
   m_Father: {fileID: 0}
-  m_RootOrder: 5
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -985,6 +938,10 @@ Prefab:
       propertyPath: m_Pivot.y
       value: 0.5
       objectReference: {fileID: 0}
+    - target: {fileID: 1484271892989992, guid: ab616e872cbc5424e8dbbb9e90fb4cec, type: 2}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ab616e872cbc5424e8dbbb9e90fb4cec, type: 2}
   m_IsPrefabAsset: 0
@@ -996,9 +953,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1203118890}
-  - component: {fileID: 1203118889}
   - component: {fileID: 1203118892}
-  - component: {fileID: 1203118891}
+  - component: {fileID: 1203118889}
   m_Layer: 0
   m_Name: HandCardManager
   m_TagString: Untagged
@@ -1014,26 +970,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 1203118888}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3cd0afe563499b0489db8b2ad2c81223, type: 3}
+  m_Script: {fileID: 11500000, guid: c148196bb3ff1864fa0516877a365249, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Event: {fileID: 11400000, guid: dd47e8ab981a62e45bc7959e55b7386a, type: 2}
-  Response:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 1203118891}
-        m_MethodName: SpawnCard
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-    m_TypeName: UnityStringEvent, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
-      PublicKeyToken=null
+  EnabledHandCards: {fileID: 11400000, guid: 1ee71435848324a449929e9c8d9ada07, type: 2}
+  HandCardContainers: {fileID: 11400000, guid: cab5819d545bf334ebe0c6388a3f123d, type: 2}
+  HandCardItemPool: {fileID: 1203118892}
+  LocalSpawnPosition: {x: 0, y: 0, z: 0}
 --- !u!4 &1203118890
 Transform:
   m_ObjectHideFlags: 0
@@ -1047,21 +990,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1203118891
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1203118888}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 420273eeac66ee04db836132a1828c48, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  EnabledCards: {fileID: 11400000, guid: 1ee71435848324a449929e9c8d9ada07, type: 2}
-  HandCardContainers: {fileID: 11400000, guid: cab5819d545bf334ebe0c6388a3f123d, type: 2}
-  LocalSpawnPosition: {x: 0, y: 0, z: 0}
-  CardPF: {fileID: 899582531}
 --- !u!114 &1203118892
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1070,26 +998,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 1203118888}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c5f7f3fc7ad51a047a624d99af0d25e5, type: 3}
+  m_Script: {fileID: 11500000, guid: d50e4b5fa2e8f1147a299b345d1e95fa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Event: {fileID: 11400000, guid: 8fbb47e072dde914db5be8c55d4a03b0, type: 2}
-  Response:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 1203118891}
-        m_MethodName: SpawnRandomCard
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
+  Prefab: {fileID: 114882802215507288, guid: ab616e872cbc5424e8dbbb9e90fb4cec, type: 2}
 --- !u!1 &1425945667
 GameObject:
   m_ObjectHideFlags: 0
@@ -1799,7 +1711,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 390, y: 211}
+  m_AnchoredPosition: {x: 449.3, y: 239.2}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &2109236914

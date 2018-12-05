@@ -4,11 +4,11 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class HandCardItem : MonoBehaviour {
+public class HandCardItem : PooledObject {
     public HandCardSet EnabledCards;
     public HandCardSet DisabledCards;
 
-    public BasicCard Card { get; private set; }
+    public Card Card { get; private set; }
 
     public Text Name;
     public Image Sprite;
@@ -20,17 +20,16 @@ public class HandCardItem : MonoBehaviour {
 
     }
 
-    public void Initialize(BasicCard card)
+    public void Initialize(Card card)
     {
         Card = card;
 
         Name.text = Card.name;
-        AttackPower.text = Card.attackPower.ToString();
-        EnergyCost.text = Card.energyCost.ToString();
+        AttackPower.text = Card.power.ToString();
+        EnergyCost.text = Card.cost.ToString();
 
-        string spritePath = "Textures/" + Card.spriteFile;
-
-        Sprite.sprite = Resources.Load<Sprite>(spritePath);
+        //string spritePath = "Textures/" + Card.spriteFile;
+        //Sprite.sprite = Resources.Load<Sprite>(spritePath);
     }
 
     private void OnEnable()

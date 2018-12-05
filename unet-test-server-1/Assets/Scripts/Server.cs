@@ -17,6 +17,7 @@ public class Server : ManagedBehaviour<Server> {
     private byte _error;
 
     public GameInstance CurrentGame { get; private set; }
+    public Deck CurrentDeck { get; private set; }
 
     public bool IsOnline { get; private set; }
 
@@ -28,7 +29,6 @@ public class Server : ManagedBehaviour<Server> {
 
     public override void Init()
     {
-        CurrentGame = new GameInstance();
 
         NetworkTransport.Init();
 
@@ -120,7 +120,8 @@ public class Server : ManagedBehaviour<Server> {
             PlayersConnectedMsg playersReadyMsg = new PlayersConnectedMsg();
             SendToClient(CurrentGame.Player1.ConnectionId, playersReadyMsg);
             SendToClient(CurrentGame.Player2.ConnectionId, playersReadyMsg);
-
+            CurrentGame = new GameInstance();
+            CurrentDeck = new Deck(CardCache.Instance, 20, true);
         }
 
     }
@@ -145,5 +146,10 @@ public class Server : ManagedBehaviour<Server> {
         NetworkTransport.Send(_hostId, cnnId, _reliableChannel, buffer, MSG_BYTE_SIZE, out _error);
     }
 
+
+    public void SendTotalUpdate()
+    {
+        SendToClient(CurrentGame.Player1.ConnectionId, new TotalStateUpdateMsg());
+    }
 
 }

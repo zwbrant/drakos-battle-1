@@ -16,6 +16,7 @@ public class Client : ManagedBehaviour<Client> {
     public ClientGameState OnConnectedState;
     public GameStateEvent GameStateEvent;
 
+    public PlayerSetup PlayerSetup { get; private set; }
     public bool IsOnline { get; private set; }
 
     public const int MSG_BYTE_SIZE = 1024;
@@ -112,12 +113,21 @@ public class Client : ManagedBehaviour<Client> {
                 break;
             case NetOP.PlayersConnected:
                 Debug.Log("Players connected");
-                GameStateEvent.Raise(ClientGameState.CardSetup);
+                OnPlayersConnected(cnnId, channelId, hostId, netMsg);
+                break;
+            case NetOP.TotalStateUpdate:
+                Debug.Log("DOG CAT");
                 break;
             default:
                 break;
 
         }
+    }
+
+    public void OnPlayersConnected(int cnnId, int channelId, int hostId, NetMsg netMsg)
+    {
+        GameStateEvent.Raise(ClientGameState.CardSetup);
+        PlayerSetup = new PlayerSetup();
     }
 
 

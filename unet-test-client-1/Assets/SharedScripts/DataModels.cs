@@ -24,6 +24,19 @@ public class PlayerSetup
 
 }
 
+[Serializable]
+public class PlayerStateUpdate
+{
+    public List<Circle> Circles;
+    public int CircleRotation;
+
+    public List<string> DrawnHandCards;
+    public List<string> DiscardedHandCards;
+
+    public int DragonHpChange;
+    public int DragonEnergyChange;
+}
+
 #endregion
 
 
@@ -90,8 +103,16 @@ public class Card
 [Serializable]
 public class Circle
 {
-    public CircleColor Color;
-    public string PlacedCardId;
+    public int CircleID { get; set; }
+    public CircleColor Color { get; set; }
+    public PlacedCard Card { get; set; }
+}
+
+[Serializable]
+public class PlacedCard
+{
+    public string CardId { get; set; }
+    public int HP { get; set; }
 }
 
 
