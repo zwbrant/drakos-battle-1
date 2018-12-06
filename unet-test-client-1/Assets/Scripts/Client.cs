@@ -14,9 +14,10 @@ public class Client : ManagedBehaviour<Client> {
     public StringVariable Port;
 
     public ClientGameState OnConnectedState;
+    public GameEventDispatcher EventDispatcher;
     public GameStateEvent GameStateEvent;
 
-    public PlayerSetup PlayerSetup { get; private set; }
+    public PlayerInstance PlayerSetup { get; private set; }
     public bool IsOnline { get; private set; }
 
     public const int MSG_BYTE_SIZE = 1024;
@@ -104,15 +105,16 @@ public class Client : ManagedBehaviour<Client> {
         }
     }
 
+    #region OnData
     public void OnData(int cnnId, int channelId, int hostId, NetMsg netMsg)
     {
         switch (netMsg.OP)
         {
             case NetOP.CardDealt:
-                Debug.Log("Card Dealt Msg");
+                Debug.Log("OnData: CardDealt");
                 break;
             case NetOP.PlayersConnected:
-                Debug.Log("Players connected");
+                Debug.Log("OnData: PlayersConnected");
                 OnPlayersConnected(cnnId, channelId, hostId, netMsg);
                 break;
             case NetOP.TotalStateUpdate:
@@ -127,8 +129,12 @@ public class Client : ManagedBehaviour<Client> {
     public void OnPlayersConnected(int cnnId, int channelId, int hostId, NetMsg netMsg)
     {
         GameStateEvent.Raise(ClientGameState.CardSetup);
-        PlayerSetup = new PlayerSetup();
+        PlayerSetup = new PlayerInstance();
     }
+
+
+
+    #endregion
 
 
     public void OnConnectedToServer()

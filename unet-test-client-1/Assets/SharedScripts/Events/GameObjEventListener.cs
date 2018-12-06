@@ -1,9 +1,9 @@
-﻿using RoboRyanTron.Unite2017.Events;
-using System.Collections;
-using System.Collections.Generic;
+﻿using System;
 using UnityEngine;
+using UnityEngine.Events;
 
-public class GameObjEventListener : MonoBehaviour {
+public class GameObjEventListener : MonoBehaviour
+{
     [Tooltip("Event to register with.")]
     public GameObjEvent Event;
 
@@ -17,7 +17,7 @@ public class GameObjEventListener : MonoBehaviour {
     }
 
     private void OnDisable()
-    {  
+    {
         if (Event != null)
             Event.UnregisterListener(this);
     }

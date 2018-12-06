@@ -7,34 +7,35 @@ using System.Collections.Generic;
 [Serializable]
 public class GameInstance
 {
+    public ClientGameState GameState;
+
     public Player Player1 { get; set; }
     public Player Player2 { get; set; }
 
-    public PlayerSetup Player1Setup { get; set; }
-    public PlayerSetup Player2Setup { get; set; }
-
+    public PlayerInstance Player1Setup { get; set; }
+    public PlayerInstance Player2Setup { get; set; }
 }
 
 [Serializable]
-public class PlayerSetup
+public class PlayerInstance
 {
     public string[] HandCards { get; set; }
     public Circle[] Circles { get; set; }
     public string Dragon { get; set; }
-
 }
 
 [Serializable]
 public class PlayerStateUpdate
 {
-    public List<Circle> Circles;
-    public int CircleRotation;
+    public Circle[] CircleChanges;
+    public int? CircleRotation;
 
-    public List<string> DrawnHandCards;
-    public List<string> DiscardedHandCards;
+    public string[] DrawnCards;
+    public string[] DiscardedCards;
 
-    public int DragonHpChange;
-    public int DragonEnergyChange;
+    public string NewDragonEquip;
+    public int? DragonDamage;
+    public int? DragonEnergyChange;
 }
 
 #endregion

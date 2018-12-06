@@ -6,6 +6,7 @@ public class HandCardManager : MonoBehaviour {
     public HandCardSet EnabledHandCards;
     public ContainerSet HandCardContainers;
     public ObjectPool HandCardItemPool;
+    public StringArrayEvent UpdateCardsEvent;
     public Vector3 LocalSpawnPosition = Vector3.zero;
 
     public void SpawnCard(Card card)
@@ -28,4 +29,14 @@ public class HandCardManager : MonoBehaviour {
         cardItem.gameObject.name = "Card " + EnabledHandCards.Items.Count;
     }
 
+
+    public void DrawCards(string[] cardIds)
+    {
+        throw new System.NotImplementedException();
+    }
+
+    public void DiscardCards(string[] cardIds)
+    {
+        throw new System.NotImplementedException();
+    }
 }

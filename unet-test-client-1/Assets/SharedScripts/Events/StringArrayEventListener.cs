@@ -2,13 +2,13 @@
 using UnityEngine;
 using UnityEngine.Events;
 
-public class StringEventListener : MonoBehaviour
+public class StringArrayEventListener : MonoBehaviour
 {
     [Tooltip("Event to register with.")]
-    public StringEvent Event;
+    public StringArrayEvent Event;
 
     [Tooltip("Response to invoke when Event is raised.")]
-    public UnityStringEvent Response;
+    public UnityStringArrayEvent Response;
 
     private void OnEnable()
     {
@@ -20,8 +20,8 @@ public class StringEventListener : MonoBehaviour
         Event.UnregisterListener(this);
     }
 
-    public virtual void OnEventRaised(string s1)
+    public virtual void OnEventRaised(string[] array)
     {
-        Response.Invoke(s1);
+        Response.Invoke(array);
     }
 }

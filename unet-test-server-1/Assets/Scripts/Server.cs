@@ -149,7 +149,7 @@ public class Server : ManagedBehaviour<Server> {
 
     public void SendTotalUpdate()
     {
-        SendToClient(CurrentGame.Player1.ConnectionId, new TotalStateUpdateMsg());
+        SendToClient(CurrentGame.Player1.ConnectionId, new GameInstanceUpdateMsg());
     }
 
 }
