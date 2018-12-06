@@ -16,8 +16,7 @@ public class Server : ManagedBehaviour<Server> {
     private byte _reliableChannel;
     private byte _error;
 
-    public GameInstance CurrentGame { get; private set; }
-    public Deck CurrentDeck { get; private set; }
+    public ServerGameInstanceManager InstanceManager { get; private set; }
 
     public bool IsOnline { get; private set; }
 
@@ -83,29 +82,34 @@ public class Server : ManagedBehaviour<Server> {
 
     private void OnDisconnect(int cnnId, int channelId, int recHostId)
     {
-        if (CurrentGame.Player1 != null && CurrentGame.Player1.ConnectionId == cnnId)
+        if (InstanceManager.Game.Player1 != null && InstanceManager.Game.Player1.ConnectionId == cnnId)
         {
-            CurrentGame.Player1 = null;
+            InstanceManager.Game.Player1 = null;
         }
 
-        if (CurrentGame.Player2 != null && CurrentGame.Player2.ConnectionId == cnnId)
+        if (InstanceManager.Game.Player2 != null && InstanceManager.Game.Player2.ConnectionId == cnnId)
         {
-            CurrentGame.Player2 = null;
+            InstanceManager.Game.Player2 = null;
+        }
+
+        if (InstanceManager.Game.Player1 == null && InstanceManager.Game.Player2 == null)
+        {
+            InstanceManager.DestroyGameInstance();
         }
     }
 
     private bool AddNewPlayer(int cnnId)
     {
-        if (CurrentGame.Player1 != null && CurrentGame.Player2 != null)
+        if (InstanceManager.Game.Player1 != null && InstanceManager.Game.Player2 != null)
         {
             Debug.LogError("Can't add another player, there are already two connected");
             return false;
         }
 
-        if (CurrentGame.Player1 == null) {
-            CurrentGame.Player1 = new Player() { ConnectionId = cnnId };
+        if (InstanceManager.Game.Player1 == null) {
+            InstanceManager.Game.Player1 = new Player() { ConnectionId = cnnId };
         } else {
-            CurrentGame.Player2 = new Player() { ConnectionId = cnnId };
+            InstanceManager.Game.Player2 = new Player() { ConnectionId = cnnId };
         }
         return true;
     }
@@ -113,15 +117,15 @@ public class Server : ManagedBehaviour<Server> {
     public void OnConnect(int cnnId, int channelId, int hostId)
     {
         Debug.Log(string.Format("User {0} has connected", cnnId));
+        InstanceManager.CreateNewGameInstance(new Deck(CardCache.Instance, 20, true));
 
         // succesfully added new player and both players are connected
-        if (AddNewPlayer(cnnId) && CurrentGame.Player1 != null && CurrentGame.Player2 != null)
+        if (AddNewPlayer(cnnId) && InstanceManager.Game.Player1 != null && InstanceManager.Game.Player2 != null)
         {
             PlayersConnectedMsg playersReadyMsg = new PlayersConnectedMsg();
-            SendToClient(CurrentGame.Player1.ConnectionId, playersReadyMsg);
-            SendToClient(CurrentGame.Player2.ConnectionId, playersReadyMsg);
-            CurrentGame = new GameInstance();
-            CurrentDeck = new Deck(CardCache.Instance, 20, true);
+            SendToClient(InstanceManager.Game.Player1.ConnectionId, playersReadyMsg);
+            SendToClient(InstanceManager.Game.Player2.ConnectionId, playersReadyMsg);
+
         }
 
     }
@@ -144,12 +148,6 @@ public class Server : ManagedBehaviour<Server> {
         byte[] buffer = MsgSerializer.SerializeNetMsg(msg, MSG_BYTE_SIZE);
 
         NetworkTransport.Send(_hostId, cnnId, _reliableChannel, buffer, MSG_BYTE_SIZE, out _error);
-    }
-
-
-    public void SendTotalUpdate()
-    {
-        SendToClient(CurrentGame.Player1.ConnectionId, new GameInstanceUpdateMsg());
     }
 
 }

@@ -5,13 +5,12 @@ using UnityEngine;
 [System.Serializable]
 public class InitGameBoardMsg : NetMsg {
 
-    public string[] DealtCards { get; set; }
-    public Dragon OpponentDragon { get; set; }
-    public CircleColor[] CircleColors { get; set; }
+    public PlayerStateUpdate P1Update;
+    public PlayerStateUpdate P2Update;
 
 
     public InitGameBoardMsg()
     {
-        OP = NetOP.InitGameBoard;
+        OP = NetOP.GameInit;
     } 
 }

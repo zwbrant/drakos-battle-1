@@ -7,7 +7,7 @@ public enum NetOP : byte
     None,
     CardDealt,
     PlayersConnected,
-    InitGameBoard,
+    GameInit,
     TotalStateUpdate
 }
 

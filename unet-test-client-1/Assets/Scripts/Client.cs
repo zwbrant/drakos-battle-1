@@ -15,7 +15,7 @@ public class Client : ManagedBehaviour<Client> {
 
     public ClientGameState OnConnectedState;
     public GameEventDispatcher EventDispatcher;
-    public GameStateEvent GameStateEvent;
+    public GameInstanceManager InstanceManager;
 
     public PlayerInstance PlayerSetup { get; private set; }
     public bool IsOnline { get; private set; }
@@ -117,9 +117,13 @@ public class Client : ManagedBehaviour<Client> {
                 Debug.Log("OnData: PlayersConnected");
                 OnPlayersConnected(cnnId, channelId, hostId, netMsg);
                 break;
+            case NetOP.GameInit:
+                OnGameInit(cnnId, channelId, hostId, netMsg);
+                break;
             case NetOP.TotalStateUpdate:
                 Debug.Log("DOG CAT");
                 break;
+            
             default:
                 break;
 
@@ -128,11 +132,15 @@ public class Client : ManagedBehaviour<Client> {
 
     public void OnPlayersConnected(int cnnId, int channelId, int hostId, NetMsg netMsg)
     {
-        GameStateEvent.Raise(ClientGameState.CardSetup);
-        PlayerSetup = new PlayerInstance();
+        InstanceManager.CreateNewGameInstance();
+        InstanceManager.CreateNewTurnInstance();
+        EventDispatcher.HandleGameStateUpdate(ClientGameState.CardSetup);
     }
 
-
+    public void OnGameInit(int cnnId, int channelId, int hostId, NetMsg netMsg)
+    {
+        
+    }
 
     #endregion
 
@@ -140,19 +148,6 @@ public class Client : ManagedBehaviour<Client> {
     public void OnConnectedToServer()
     {
         //SceneManager.LoadScene(1);
-    }
-
-    private void OnLevelWasLoaded(int level)
-    {
-        string levelName = SceneManager.GetSceneByBuildIndex(level).name;
-        switch (levelName)
-        {
-            case "Battle":
-                GameStateEvent.Raise(OnConnectedState);
-                break;
-            default:
-                break;
-        }
     }
 
     public void SendToServer(NetMsg msg)
@@ -165,11 +160,5 @@ public class Client : ManagedBehaviour<Client> {
 
         NetworkTransport.Send(_hostId, _connectionId, _reliableChannel, buffer, MSG_BYTE_SIZE, out _error);
     }
-
-    public void SendCardDealtMsg()
-    {
-        SendToServer(new CardDealtMsg() { CardName = "Salmon Baby" });
-    }
-
 
 }

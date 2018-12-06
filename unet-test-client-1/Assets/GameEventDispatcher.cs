@@ -5,20 +5,26 @@ using UnityEngine;
 
 public class GameEventDispatcher : MonoBehaviour
 {
+    public GameStateEvent GameStateEvent;
+
     public PlayerEvents P1Events;
     public PlayerEvents P2Events;
 
     [Serializable]
     public struct PlayerEvents
     {
-        public UnityStringArrayEvent DrawnCardsEvent;
-        public UnityStringArrayEvent DiscardedCardsEvent;
-        public UnityStringEvent EquipedDragonEvent;
-        public UnityIntEvent DragonDamageEvent;
-        public UnityIntEvent CircleRotationEvent;
+        public StringArrayEvent DrawnCardsEvent;
+        public StringArrayEvent DiscardedCardsEvent;
+        public StringEvent EquipedDragonEvent;
+        public IntEvent DragonDamageEvent;
+        public IntEvent CircleRotationEvent;
     }
 
-
+    public void HandleGameStateUpdate(ClientGameState gameState)
+    {
+        if (GameStateEvent != null) 
+            GameStateEvent.Raise(gameState);
+    }
 
     public void HandleGameInstanceUpdate(GameInstanceUpdateMsg update)
     {
@@ -32,15 +38,15 @@ public class GameEventDispatcher : MonoBehaviour
     {
 
         if (player.DrawnCardsEvent != null && update.DrawnCards != null)
-            player.DrawnCardsEvent.Invoke(update.DrawnCards);
+            player.DrawnCardsEvent.Raise(update.DrawnCards);
         if (player.DiscardedCardsEvent != null && update.DiscardedCards != null)
-            player.DiscardedCardsEvent.Invoke(update.DiscardedCards);
+            player.DiscardedCardsEvent.Raise(update.DiscardedCards);
         if (player.EquipedDragonEvent != null && update.NewDragonEquip != null)
-            player.EquipedDragonEvent.Invoke(update.NewDragonEquip);
+            player.EquipedDragonEvent.Raise(update.NewDragonEquip);
         if (player.DragonDamageEvent != null && update.DragonDamage != null)
-            player.DragonDamageEvent.Invoke(update.DragonDamage);
+            player.DragonDamageEvent.Raise(update.DragonDamage);
         if (player.EquipedDragonEvent != null && update.NewDragonEquip != null)
-            player.EquipedDragonEvent.Invoke(update.NewDragonEquip);
+            player.EquipedDragonEvent.Raise(update.NewDragonEquip);
 
     }
 
