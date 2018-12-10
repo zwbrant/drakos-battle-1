@@ -14,10 +14,9 @@ public class Client : ManagedBehaviour<Client> {
     public StringVariable Port;
 
     public ClientGameState OnConnectedState;
-    public GameEventDispatcher EventDispatcher;
-    public GameInstanceManager InstanceManager;
+    public PlayerManager PlayerManager;
 
-    public PlayerInstance PlayerSetup { get; private set; }
+    public PlayerGameInstance PlayerSetup { get; private set; }
     public bool IsOnline { get; private set; }
 
     public const int MSG_BYTE_SIZE = 1024;
@@ -36,12 +35,6 @@ public class Client : ManagedBehaviour<Client> {
     public override void Init()
     {
         IsOnline = false;
-    }
-
-    public void Connnect()
-    {
-        DontDestroyOnLoad(gameObject);
-
         NetworkTransport.Init();
 
         ConnectionConfig cc = new ConnectionConfig();
@@ -51,8 +44,19 @@ public class Client : ManagedBehaviour<Client> {
 
         _hostId = NetworkTransport.AddHost(hostTopology, 0);
 
-        _connectionId = NetworkTransport.Connect(_hostId, IPAddress.Value, int.Parse(Port.Value), 0, out _error);
 
+    }
+
+    public void Connnect()
+    {
+        // only ensuring dragon is equipped on the client-side for now
+        if (PlayerManager.PlayerInfo.EquippedDragonId == null)
+        {
+            Debug.LogError("Cannot connect to game until a dragon is equipped");
+            return;
+        }
+
+        _connectionId = NetworkTransport.Connect(_hostId, IPAddress.Value, int.Parse(Port.Value), 0, out _error);
         if ((NetworkError)_error != NetworkError.Ok)
         {
             //Output this message in the console with the Network Error
@@ -64,7 +68,6 @@ public class Client : ManagedBehaviour<Client> {
             Debug.Log("Connected : " + (NetworkError)_error);
             IsOnline = true;
 
-            OnConnectedToServer();
         }
     }
 
@@ -73,37 +76,43 @@ public class Client : ManagedBehaviour<Client> {
         if (!IsOnline)
             return;
 
-        int recHostId;
-        int connectionId;
-        int channelId;
+        int recHostId, cnnId, channelId;
         byte[] recBuffer = new byte[MSG_BYTE_SIZE];
         int bufferSize = 1024;
         int dataSize;
 
-        NetworkEventType networkEventType = NetworkTransport.Receive(out recHostId, out connectionId, out channelId, recBuffer, bufferSize, out dataSize, out _error);
+        NetworkEventType networkEventType = NetworkTransport.Receive(out recHostId, out cnnId, out channelId, recBuffer, bufferSize, out dataSize, out _error);
         switch (networkEventType)
         {
             case NetworkEventType.Nothing:
                 break;
             case NetworkEventType.ConnectEvent:
-                Debug.Log(string.Format("Connected to game server", connectionId));
-                SceneManager.LoadScene("Battle");
+                OnConnect(cnnId, channelId, recHostId, _error);
                 break;
             case NetworkEventType.DisconnectEvent:
-                Debug.Log(string.Format("Disconnected from game server", connectionId));
+                Debug.Log(string.Format("Disconnected from game server", cnnId));
                 break;
             case NetworkEventType.DataEvent:
                 NetMsg netMsg = MsgSerializer.DeserializeNetMsg(recBuffer);
-
-                OnData(connectionId, channelId, recHostId, netMsg);
+                OnData(cnnId, channelId, recHostId, netMsg);
                 break;
-
-
             case NetworkEventType.BroadcastEvent:
                 Debug.Log("Unexpected Network Event");
                 break;
         }
     }
+
+    #region OnConnect
+
+    private void OnConnect(int cnnId, int channelId, int hostId, int error)
+    {
+        PlayerInfoNetMsg msg = new PlayerInfoNetMsg();
+        msg.PlayerInfo = PlayerManager.PlayerInfo;
+
+        SendToServer(msg);
+    }
+
+    #endregion
 
     #region OnData
     public void OnData(int cnnId, int channelId, int hostId, NetMsg netMsg)
@@ -113,9 +122,9 @@ public class Client : ManagedBehaviour<Client> {
             case NetOP.CardDealt:
                 Debug.Log("OnData: CardDealt");
                 break;
-            case NetOP.PlayersConnected:
-                Debug.Log("OnData: PlayersConnected");
-                OnPlayersConnected(cnnId, channelId, hostId, netMsg);
+            case NetOP.PlayersJoined:
+                Debug.Log("OnData: PlayersJoined");
+                OnPlayersJoined(cnnId, channelId, hostId, netMsg);
                 break;
             case NetOP.GameInit:
                 OnGameInit(cnnId, channelId, hostId, netMsg);
@@ -130,25 +139,18 @@ public class Client : ManagedBehaviour<Client> {
         }
     }
 
-    public void OnPlayersConnected(int cnnId, int channelId, int hostId, NetMsg netMsg)
+    public void OnPlayersJoined(int cnnId, int channelId, int hostId, NetMsg netMsg)
     {
-        InstanceManager.CreateNewGameInstance();
-        InstanceManager.CreateNewTurnInstance();
-        EventDispatcher.HandleGameStateUpdate(ClientGameState.CardSetup);
+
     }
 
     public void OnGameInit(int cnnId, int channelId, int hostId, NetMsg netMsg)
     {
-        
+        //InitGameBoardMsg msg = (InitGameBoardMsg)netMsg;
+
     }
 
     #endregion
-
-
-    public void OnConnectedToServer()
-    {
-        //SceneManager.LoadScene(1);
-    }
 
     public void SendToServer(NetMsg msg)
     {

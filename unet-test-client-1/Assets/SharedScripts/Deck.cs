@@ -9,7 +9,7 @@ public class Deck
 
     public Stack<Card> Cards { get; private set; }
 
-    public Deck(Cache<Card> cardCache, int deckSize, bool allowDuplicates) 
+    public Deck(Cache<Card> cardCache, int deckSize, bool allowDuplicates, bool shuffle) 
     {
         if (!cardCache.Ready)
         {
@@ -22,10 +22,27 @@ public class Deck
         }
 
 
-        
-        for (int i = 0; i < deckSize; i++)
+        if (shuffle)
         {
-            Cards.Push(cardCache.Objects[UnityEngine.Random.Range(0, cardCache.Objects.Count - 1)]);
+            for (int i = 0; i < deckSize; i++)
+            {
+                Cards.Push(cardCache.Objects[UnityEngine.Random.Range(0, cardCache.Objects.Count - 1)]);
+            }
+            for (int i = 0; i < deckSize; i++)
+            {
+                Cards.Push(cardCache.Objects[UnityEngine.Random.Range(0, cardCache.Objects.Count - 1)]);
+            }
+        } else
+        {
+            for (int i = 0; i < deckSize; i++)
+            {
+                Cards.Push(cardCache.Objects[i]);
+            }
         }
+    }
+
+    public Card DrawCard()
+    {
+        return Cards.Pop();
     }
 }

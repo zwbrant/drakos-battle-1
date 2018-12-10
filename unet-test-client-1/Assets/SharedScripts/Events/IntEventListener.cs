@@ -13,16 +13,19 @@ public class IntEventListener : MonoBehaviour
 
     private void OnEnable()
     {
-        Event.RegisterListener(this);
+        if (Event != null)
+            Event.RegisterListener(this);
     }
 
     private void OnDisable()
     {
-        Event.UnregisterListener(this);
+        if (Event != null)
+            Event.UnregisterListener(this);
     }
 
     public virtual void OnEventRaised(int? i)
     {
-        Response.Invoke(i);
+        if (Response != null)
+            Response.Invoke(i);
     }
 }

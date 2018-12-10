@@ -6,40 +6,24 @@ using UnityEngine;
 public class GameInstanceManager : ManagedBehaviour<GameInstanceManager> {
 
     public GameInstance Game { get; private set; }
-    public PlayerStateUpdate TurnInstance { get; private set; }
 
-
-    public virtual void CreateNewGameInstance()
+    public override void Init()
     {
-        Game = new GameInstance();
+        ResetGameInstance();
     }
 
-    public virtual void DestroyGameInstance()
+    public virtual void ResetGameInstance()
     {
-        Game = null;
-    }
-
-    public virtual void CreateNewTurnInstance()
-    {
-        TurnInstance = new PlayerStateUpdate();
+        Game = new GameInstance
+        {
+            Player1Setup = new PlayerGameInstance(),
+            Player2Setup = new PlayerGameInstance()
+        };
     }
 
 
-    public bool CanEquipDragon(string dragonId)
-    {
-        return DragonCache.TryGetDragonByID(dragonId);
-    }
 
-    public void P1_SetEquippedDragon(string dragonId)
-    {
-        if (CanEquipDragon(dragonId))
-            Game.Player1Setup.Dragon = dragonId;
-    }
-    public void P2_SetEquippedDragon(string dragonId)
-    {
-        if (CanEquipDragon(dragonId))
-            Game.Player2Setup.Dragon = dragonId;
-    }
+    #region Setters
 
     public void P1_SetHandCards(string[] cards)
     {
@@ -58,15 +42,66 @@ public class GameInstanceManager : ManagedBehaviour<GameInstanceManager> {
     {
         Game.Player1Setup.Circles = circles;
     }
+    #endregion
 }
 
 public class ServerGameInstanceManager : GameInstanceManager
 {
-    public Deck Deck { get; private set; }
+    public Deck Deck { get; set; }
+    // the initial update sent to both player to setup the game board
+    public InitGameSetup InitSetup { get; private set; }
 
-    public void CreateNewGameInstance(Deck deck)
+    public InitGameSetup CreateInitSetup()
     {
-        base.CreateNewGameInstance();
-        Deck = deck;
+        InitSetup = new InitGameSetup
+        {
+            P1Setup = CreateInitPlayerStateUpdate(),
+            P2Setup = CreateInitPlayerStateUpdate()
+        };
+
+        return InitSetup;
     }
+
+    private PlayerStateUpdate CreateInitPlayerStateUpdate()
+    {
+        PlayerStateUpdate playerState = new PlayerStateUpdate();
+        // create empty circles
+        CircleUpdate[] circles = new CircleUpdate[6];
+        for (int i = 0; i < 6; i++)
+        {
+            circles[i] = CreateEmptyCircleUpdate(i);
+        }
+
+        // draw initial cards
+        string[] drawnCards = new string[5];
+        for (int i = 0; i < 5; i++)
+        {
+            drawnCards[i] = Deck.DrawCard().id;
+        }
+
+        playerState.CircleChanges = circles;
+        playerState.DrawnCards = drawnCards;
+
+        return playerState;
+    }
+
+    public CircleUpdate CreateEmptyCircleUpdate(int index)
+    {
+        CircleUpdate update = new CircleUpdate();
+
+        Array values = Enum.GetValues(typeof(CircleColor));
+        System.Random random = new System.Random();
+        CircleColor randColor = (CircleColor)values.GetValue(random.Next(values.Length));
+
+        update.NewColor = randColor;
+        update.CircleIndex = index;
+        update.NewCard = null;
+        update.CardHpChange = null;
+
+        return update;
+    }
+
+     
+
+
 }

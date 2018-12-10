@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class ServerClient {
     public int ConnectionId { get; set; }
-
 }
 
 

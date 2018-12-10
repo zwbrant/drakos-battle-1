@@ -6,8 +6,9 @@ public enum NetOP : byte
 {
     None,
     CardDealt,
-    PlayersConnected,
+    PlayersJoined,
     GameInit,
+    PlayerInfo,
     TotalStateUpdate
 }
 

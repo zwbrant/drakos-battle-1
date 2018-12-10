@@ -3,13 +3,11 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [System.Serializable]
-public class InitGameBoardMsg : NetMsg {
+public class InitGameSetupMsg : NetMsg {
 
-    public PlayerStateUpdate P1Update;
-    public PlayerStateUpdate P2Update;
+    public InitGameSetup InitSetup { get; set; }
 
-
-    public InitGameBoardMsg()
+    public InitGameSetupMsg()
     {
         OP = NetOP.GameInit;
     } 

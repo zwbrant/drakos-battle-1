@@ -7,6 +7,6 @@ public class PlayersConnectedMsg : NetMsg {
 
     public PlayersConnectedMsg()
     {
-        OP = NetOP.PlayersConnected;
+        OP = NetOP.PlayersJoined;
     }
 }

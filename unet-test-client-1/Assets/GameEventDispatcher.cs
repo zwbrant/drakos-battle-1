@@ -43,8 +43,8 @@ public class GameEventDispatcher : MonoBehaviour
             player.DiscardedCardsEvent.Raise(update.DiscardedCards);
         if (player.EquipedDragonEvent != null && update.NewDragonEquip != null)
             player.EquipedDragonEvent.Raise(update.NewDragonEquip);
-        if (player.DragonDamageEvent != null && update.DragonDamage != null)
-            player.DragonDamageEvent.Raise(update.DragonDamage);
+        if (player.DragonDamageEvent != null && update.DragonHpChange != null)
+            player.DragonDamageEvent.Raise(update.DragonHpChange);
         if (player.EquipedDragonEvent != null && update.NewDragonEquip != null)
             player.EquipedDragonEvent.Raise(update.NewDragonEquip);
 

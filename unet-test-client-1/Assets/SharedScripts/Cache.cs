@@ -13,6 +13,11 @@ public class Cache<T> : ManagedBehaviour<Cache<T>>
     public bool Ready { get; private set; }
     public List<T> Objects { get; private set; }
 
+    public Cache() {
+        Ready = false;
+        Objects = new List<T>();
+    }
+
     public override void Init()
     {
         Objects = new List<T>();

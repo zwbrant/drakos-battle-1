@@ -16,7 +16,10 @@ public class Server : ManagedBehaviour<Server> {
     private byte _reliableChannel;
     private byte _error;
 
-    public ServerGameInstanceManager InstanceManager { get; private set; }
+    public PlayerManager Player1;
+    public PlayerManager Player2;
+
+    public ServerGameInstanceManager GameInstance { get; private set; }
 
     public bool IsOnline { get; private set; }
 
@@ -28,7 +31,6 @@ public class Server : ManagedBehaviour<Server> {
 
     public override void Init()
     {
-
         NetworkTransport.Init();
 
         ConnectionConfig cc = new ConnectionConfig();
@@ -48,9 +50,7 @@ public class Server : ManagedBehaviour<Server> {
         if (!IsOnline)
             return;
 
-        int recHostId;
-        int connectionId;
-        int channelId;
+        int recHostId, connectionId, channelId;
         byte[] recBuffer = new byte[MSG_BYTE_SIZE];
         int bufferSize = 1024;
         int dataSize;
@@ -69,10 +69,8 @@ public class Server : ManagedBehaviour<Server> {
                 //ServerClients.Remove();
                 break;
             case NetworkEventType.DataEvent:
-
                 NetMsg netMsg = MsgSerializer.DeserializeNetMsg(recBuffer);
                 OnData(connectionId, channelId, recHostId, netMsg);
-
                 break;
             case NetworkEventType.BroadcastEvent:
                 Debug.Log("Unexpected Network Event");
@@ -80,55 +78,64 @@ public class Server : ManagedBehaviour<Server> {
         }
     }
 
+    #region Connect & Disconnect functions
+
+    public void OnConnect(int cnnId, int channelId, int hostId)
+    {
+        Debug.Log(string.Format("User {0} has connected", cnnId));
+
+        // succesfully added new player and both players are connected
+        if (AddNewPlayer(cnnId) && Player1.IsConnected && Player2.IsConnected)
+        {
+            PlayersConnectedMsg playersReadyMsg = new PlayersConnectedMsg();
+            SendToClient((int)Player1.ConnectionId, playersReadyMsg);
+            SendToClient((int)Player2.ConnectionId, playersReadyMsg);
+
+            GameInstance.ResetGameInstance();
+            GameInstance.Deck = new Deck(CardCache.Instance, 20, true, true);
+
+            InitGameSetupMsg initSetupMsg = new InitGameSetupMsg();
+            initSetupMsg.InitSetup = GameInstance.CreateInitSetup();
+            SendToClient((int)Player1.ConnectionId, initSetupMsg);
+            SendToClient((int)Player2.ConnectionId, initSetupMsg);
+        }
+
+    }
+
     private void OnDisconnect(int cnnId, int channelId, int recHostId)
     {
-        if (InstanceManager.Game.Player1 != null && InstanceManager.Game.Player1.ConnectionId == cnnId)
-        {
-            InstanceManager.Game.Player1 = null;
-        }
+        if (!Player1.IsConnected && !Player2.IsConnected)
+            return;
 
-        if (InstanceManager.Game.Player2 != null && InstanceManager.Game.Player2.ConnectionId == cnnId)
-        {
-            InstanceManager.Game.Player2 = null;
-        }
-
-        if (InstanceManager.Game.Player1 == null && InstanceManager.Game.Player2 == null)
-        {
-            InstanceManager.DestroyGameInstance();
-        }
+        var player = GetPlayer(cnnId);
+        if (player == null)
+            return;
+        else
+            player.SetDisconnected();
     }
 
     private bool AddNewPlayer(int cnnId)
     {
-        if (InstanceManager.Game.Player1 != null && InstanceManager.Game.Player2 != null)
+        if (Player1.IsConnected && Player2.IsConnected)
         {
             Debug.LogError("Can't add another player, there are already two connected");
             return false;
         }
 
-        if (InstanceManager.Game.Player1 == null) {
-            InstanceManager.Game.Player1 = new Player() { ConnectionId = cnnId };
-        } else {
-            InstanceManager.Game.Player2 = new Player() { ConnectionId = cnnId };
+        if (!Player1.IsConnected)
+        {
+            Player1.SetConnected(cnnId, PlayerOrdinal.Player1);
+        }
+        else
+        {
+            Player2.SetConnected(cnnId, PlayerOrdinal.Player2);
         }
         return true;
     }
 
-    public void OnConnect(int cnnId, int channelId, int hostId)
-    {
-        Debug.Log(string.Format("User {0} has connected", cnnId));
-        InstanceManager.CreateNewGameInstance(new Deck(CardCache.Instance, 20, true));
+    #endregion
 
-        // succesfully added new player and both players are connected
-        if (AddNewPlayer(cnnId) && InstanceManager.Game.Player1 != null && InstanceManager.Game.Player2 != null)
-        {
-            PlayersConnectedMsg playersReadyMsg = new PlayersConnectedMsg();
-            SendToClient(InstanceManager.Game.Player1.ConnectionId, playersReadyMsg);
-            SendToClient(InstanceManager.Game.Player2.ConnectionId, playersReadyMsg);
-
-        }
-
-    }
+    #region OnData
 
     public void OnData(int cnnId, int channelId, int hostId, NetMsg netMsg)
     {
@@ -137,17 +144,46 @@ public class Server : ManagedBehaviour<Server> {
             case NetOP.CardDealt:
                 Debug.Log("sda");
                 break;
+            case NetOP.PlayerInfo:
+                OnPlayerInfo(cnnId, channelId, hostId, (PlayerInfoNetMsg)netMsg);
+                break;
             default:
                 break;
 
         }
     }
 
+    private void OnPlayerInfo(int cnnId, int channelId, int hostId, PlayerInfoNetMsg netMsg)
+    {
+        var player = GetPlayer(cnnId);
+        if (player == null)
+        {
+            Debug.LogError("Can't set player info, because no player is associated with this connection");
+            return;
+        }
+
+        player.PlayerInfo = netMsg.PlayerInfo;
+        Debug.Log(string.Format("Player {0} equipped dragon {1}", player.PlayerNumber, player.PlayerInfo.EquippedDragonId));
+
+    }
+
+    #endregion
+
     public void SendToClient(int cnnId, NetMsg msg)
     {
         byte[] buffer = MsgSerializer.SerializeNetMsg(msg, MSG_BYTE_SIZE);
 
         NetworkTransport.Send(_hostId, cnnId, _reliableChannel, buffer, MSG_BYTE_SIZE, out _error);
+    }
+
+    public PlayerManager GetPlayer(int cnnId)
+    {
+        if (Player1.ConnectionId == cnnId)
+            return Player1;
+        if (Player2.ConnectionId == cnnId)
+            return Player2;
+
+        return null;
     }
 
 }
