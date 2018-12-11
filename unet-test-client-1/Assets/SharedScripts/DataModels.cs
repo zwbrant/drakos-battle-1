@@ -7,8 +7,6 @@ using System.Collections.Generic;
 [Serializable]
 public class GameInstance
 {
-    public ClientGameState GameState;
-
     public PlayerGameInstance Player1Setup { get; set; }
     public PlayerGameInstance Player2Setup { get; set; }
 }
@@ -32,15 +30,15 @@ public class PlayerGameInstance
 [Serializable]
 public class PlayerStateUpdate
 {
+    public string NewDragonEquip { get; set; }
+    public int? DragonHpChange { get; set; }
+    public int? DragonEnergyChange { get; set; }
+
     public CircleUpdate[] CircleChanges { get; set; }
     public int? CircleRotation { get; set; }
 
     public string[] DrawnCards { get; set; }
     public string[] DiscardedCards { get; set; }
-
-    public string NewDragonEquip { get; set; }
-    public int? DragonHpChange { get; set; }
-    public int? DragonEnergyChange { get; set; }
 }
 
 [Serializable]
@@ -141,7 +139,7 @@ public class Circle
 public class CircleUpdate
 {
     public int CircleIndex { get; set; }
-    public CircleColor NewColor { get; set; }
+    public CircleColor? NewColor { get; set; }
     public PlacedCard NewCard { get; set; }
     public int? CardHpChange { get; set; }
 

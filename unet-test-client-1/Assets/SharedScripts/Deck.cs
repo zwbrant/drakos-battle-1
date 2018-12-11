@@ -21,7 +21,7 @@ public class Deck
                 string.Format("Can't build a Deck of size {0} because the given cache only contains {1} cards", deckSize, cardCache.Objects.Count));
         }
 
-
+        Cards = new Stack<Card>();
         if (shuffle)
         {
             for (int i = 0; i < deckSize; i++)

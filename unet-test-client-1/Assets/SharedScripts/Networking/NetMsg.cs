@@ -9,7 +9,9 @@ public enum NetOP : byte
     PlayersJoined,
     GameInit,
     PlayerInfo,
-    TotalStateUpdate
+    TotalStateUpdate,
+    SetPlayerNumber,
+    InitSetup
 }
 
 [System.Serializable]

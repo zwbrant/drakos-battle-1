@@ -9,7 +9,7 @@ public class PlayerManager : MonoBehaviour {
     public bool IsConnected { get; set; }
     public int? ConnectionId { get; set; }
 
-    public void Start()
+    public void Awake()
     {
         SetDisconnected();
     }
@@ -18,6 +18,7 @@ public class PlayerManager : MonoBehaviour {
     {
         ConnectionId = cnnId;
         PlayerNumber = playerNumber;
+        Debug.Log("Player set as " + playerNumber);
         IsConnected = true;
     }
 
@@ -26,6 +27,11 @@ public class PlayerManager : MonoBehaviour {
         PlayerInfo = new PlayerInfo();
         IsConnected = false;
         ConnectionId = null;
+    }
+
+    public bool IsReadyToBattle()
+    {
+        return IsConnected && PlayerInfo.EquippedDragonId != null;
     }
 
 

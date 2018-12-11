@@ -3,11 +3,12 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [System.Serializable]
-public class InitGameSetupMsg : NetMsg {
+public class InitGameSetupNetMsg : NetMsg {
 
+    public PlayerOrdinal ClientPlayerNumber { get; set; }
     public InitGameSetup InitSetup { get; set; }
 
-    public InitGameSetupMsg()
+    public InitGameSetupNetMsg()
     {
         OP = NetOP.GameInit;
     } 

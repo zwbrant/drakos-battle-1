@@ -14,6 +14,8 @@ public class Client : ManagedBehaviour<Client> {
     public StringVariable Port;
 
     public ClientGameState OnConnectedState;
+
+    public GameInstanceManager GameInstance;
     public PlayerManager PlayerManager;
 
     public PlayerGameInstance PlayerSetup { get; private set; }
@@ -65,7 +67,6 @@ public class Client : ManagedBehaviour<Client> {
         //Otherwise if no errors occur, output this message to the console
         else
         {
-            Debug.Log("Connected : " + (NetworkError)_error);
             IsOnline = true;
 
         }
@@ -78,7 +79,7 @@ public class Client : ManagedBehaviour<Client> {
 
         int recHostId, cnnId, channelId;
         byte[] recBuffer = new byte[MSG_BYTE_SIZE];
-        int bufferSize = 1024;
+        int bufferSize = MSG_BYTE_SIZE;
         int dataSize;
 
         NetworkEventType networkEventType = NetworkTransport.Receive(out recHostId, out cnnId, out channelId, recBuffer, bufferSize, out dataSize, out _error);
@@ -106,6 +107,7 @@ public class Client : ManagedBehaviour<Client> {
 
     private void OnConnect(int cnnId, int channelId, int hostId, int error)
     {
+        Debug.Log("Connected to Server");
         PlayerInfoNetMsg msg = new PlayerInfoNetMsg();
         msg.PlayerInfo = PlayerManager.PlayerInfo;
 
@@ -126,13 +128,16 @@ public class Client : ManagedBehaviour<Client> {
                 Debug.Log("OnData: PlayersJoined");
                 OnPlayersJoined(cnnId, channelId, hostId, netMsg);
                 break;
-            case NetOP.GameInit:
-                OnGameInit(cnnId, channelId, hostId, netMsg);
+            case NetOP.InitSetup:
+                OnGameInit(cnnId, channelId, hostId, (InitSetupNetMsg)netMsg);
                 break;
             case NetOP.TotalStateUpdate:
                 Debug.Log("DOG CAT");
                 break;
-            
+            case NetOP.SetPlayerNumber:
+                PlayerManager.PlayerNumber = ((SetPlayerNumberNetMsg)netMsg).PlayerNumber;
+                break;
+
             default:
                 break;
 
@@ -144,9 +149,12 @@ public class Client : ManagedBehaviour<Client> {
 
     }
 
-    public void OnGameInit(int cnnId, int channelId, int hostId, NetMsg netMsg)
+    public void OnGameInit(int cnnId, int channelId, int hostId, InitSetupNetMsg initSetupMsg)
     {
+        Debug.Log("Eager baby dog");
         //InitGameBoardMsg msg = (InitGameBoardMsg)netMsg;
+        PlayerManager.SetConnected(cnnId, initSetupMsg.ClientPlayerNumber);
+        GameInstance.InitializeGame(initSetupMsg.InitSetup);
 
     }
 

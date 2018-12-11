@@ -16,10 +16,9 @@ public class Server : ManagedBehaviour<Server> {
     private byte _reliableChannel;
     private byte _error;
 
+    public GameInstanceManager GameInstance;
     public PlayerManager Player1;
     public PlayerManager Player2;
-
-    public ServerGameInstanceManager GameInstance { get; private set; }
 
     public bool IsOnline { get; private set; }
 
@@ -52,10 +51,11 @@ public class Server : ManagedBehaviour<Server> {
 
         int recHostId, connectionId, channelId;
         byte[] recBuffer = new byte[MSG_BYTE_SIZE];
-        int bufferSize = 1024;
+        int bufferSize = MSG_BYTE_SIZE;
         int dataSize;
 
-        NetworkEventType networkEventType = NetworkTransport.Receive(out recHostId, out connectionId, out channelId, recBuffer, bufferSize, out dataSize, out _error);
+        NetworkEventType networkEventType = 
+            NetworkTransport.Receive(out recHostId, out connectionId, out channelId, recBuffer, bufferSize, out dataSize, out _error);
         switch (networkEventType)
         {
             case NetworkEventType.Nothing:
@@ -87,17 +87,7 @@ public class Server : ManagedBehaviour<Server> {
         // succesfully added new player and both players are connected
         if (AddNewPlayer(cnnId) && Player1.IsConnected && Player2.IsConnected)
         {
-            PlayersConnectedMsg playersReadyMsg = new PlayersConnectedMsg();
-            SendToClient((int)Player1.ConnectionId, playersReadyMsg);
-            SendToClient((int)Player2.ConnectionId, playersReadyMsg);
 
-            GameInstance.ResetGameInstance();
-            GameInstance.Deck = new Deck(CardCache.Instance, 20, true, true);
-
-            InitGameSetupMsg initSetupMsg = new InitGameSetupMsg();
-            initSetupMsg.InitSetup = GameInstance.CreateInitSetup();
-            SendToClient((int)Player1.ConnectionId, initSetupMsg);
-            SendToClient((int)Player2.ConnectionId, initSetupMsg);
         }
 
     }
@@ -141,9 +131,6 @@ public class Server : ManagedBehaviour<Server> {
     {
         switch(netMsg.OP)
         {
-            case NetOP.CardDealt:
-                Debug.Log("sda");
-                break;
             case NetOP.PlayerInfo:
                 OnPlayerInfo(cnnId, channelId, hostId, (PlayerInfoNetMsg)netMsg);
                 break;
@@ -165,9 +152,39 @@ public class Server : ManagedBehaviour<Server> {
         player.PlayerInfo = netMsg.PlayerInfo;
         Debug.Log(string.Format("Player {0} equipped dragon {1}", player.PlayerNumber, player.PlayerInfo.EquippedDragonId));
 
+        if (Player1.IsReadyToBattle() && Player2.IsReadyToBattle())
+        {
+            StartGame();
+        }
     }
 
     #endregion
+
+    public void StartGame()
+    {
+        GameInstance.InitializeGame(Player1.PlayerInfo, Player2.PlayerInfo, new Deck(CardCache.Instance, 20, true, true));
+        var p1InitSetup = new InitSetupNetMsg()
+        {
+            PlayerNumber = PlayerOrdinal.Player1,
+            PlayerSetup = GameInstance.InitSetup.P1Setup
+        };
+        var p2InitSetup = new InitSetupNetMsg()
+        {
+            PlayerNumber = PlayerOrdinal.Player2,
+            PlayerSetup = GameInstance.InitSetup.P2Setup
+        };
+        Debug.Log("Jiggly Bean");
+
+        SendToClient((int)Player1.ConnectionId, new SetPlayerNumberNetMsg() { PlayerNumber = PlayerOrdinal.Player1 });
+        SendToClient((int)Player1.ConnectionId, new SetPlayerNumberNetMsg() { PlayerNumber = PlayerOrdinal.Player2 });
+
+
+        SendToClient((int)Player1.ConnectionId, p1InitSetup);
+        SendToClient((int)Player1.ConnectionId, p2InitSetup);
+
+        SendToClient((int)Player2.ConnectionId, p1InitSetup);
+        SendToClient((int)Player2.ConnectionId, p2InitSetup);
+    }
 
     public void SendToClient(int cnnId, NetMsg msg)
     {
