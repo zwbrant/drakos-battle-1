@@ -10,7 +10,7 @@ using UnityEngine.SceneManagement;
 public class Server : ManagedBehaviour<Server> {
 
     private const int PORT = 12345;
-    private const int MSG_BYTE_SIZE = 1024;
+    private const int MSG_BYTE_SIZE = 1400;
 
     private int _hostId;
     private byte _reliableChannel;
@@ -33,7 +33,7 @@ public class Server : ManagedBehaviour<Server> {
         NetworkTransport.Init();
 
         ConnectionConfig cc = new ConnectionConfig();
-        _reliableChannel = cc.AddChannel(QosType.Reliable);
+        _reliableChannel = cc.AddChannel(QosType.Unreliable);
 
         HostTopology hostTopology = new HostTopology(cc, 100);
 
@@ -50,12 +50,12 @@ public class Server : ManagedBehaviour<Server> {
             return;
 
         int recHostId, connectionId, channelId;
-        byte[] recBuffer = new byte[MSG_BYTE_SIZE];
-        int bufferSize = MSG_BYTE_SIZE;
+        byte[] dataBuffer = new byte[MSG_BYTE_SIZE];
         int dataSize;
 
         NetworkEventType networkEventType = 
-            NetworkTransport.Receive(out recHostId, out connectionId, out channelId, recBuffer, bufferSize, out dataSize, out _error);
+            NetworkTransport.Receive(out recHostId, out connectionId, out channelId, dataBuffer, 
+            dataBuffer.Length, out dataSize, out _error);
         switch (networkEventType)
         {
             case NetworkEventType.Nothing:
@@ -69,7 +69,7 @@ public class Server : ManagedBehaviour<Server> {
                 //ServerClients.Remove();
                 break;
             case NetworkEventType.DataEvent:
-                NetMsg netMsg = MsgSerializer.DeserializeNetMsg(recBuffer);
+                NetMsg netMsg = MsgSerializer.DeserializeNetMsg(dataBuffer);
                 OnData(connectionId, channelId, recHostId, netMsg);
                 break;
             case NetworkEventType.BroadcastEvent:
@@ -166,31 +166,32 @@ public class Server : ManagedBehaviour<Server> {
         var p1InitSetup = new InitSetupNetMsg()
         {
             PlayerNumber = PlayerOrdinal.Player1,
-            PlayerSetup = GameInstance.InitSetup.P1Setup
+            PlayerSetup = GameInstance.P1Setup
         };
         var p2InitSetup = new InitSetupNetMsg()
         {
             PlayerNumber = PlayerOrdinal.Player2,
-            PlayerSetup = GameInstance.InitSetup.P2Setup
+            PlayerSetup = GameInstance.P2Setup
         };
         Debug.Log("Jiggly Bean");
 
         SendToClient((int)Player1.ConnectionId, new SetPlayerNumberNetMsg() { PlayerNumber = PlayerOrdinal.Player1 });
-        SendToClient((int)Player1.ConnectionId, new SetPlayerNumberNetMsg() { PlayerNumber = PlayerOrdinal.Player2 });
+        SendToClient((int)Player2.ConnectionId, new SetPlayerNumberNetMsg() { PlayerNumber = PlayerOrdinal.Player2 });
 
 
         SendToClient((int)Player1.ConnectionId, p1InitSetup);
-        SendToClient((int)Player1.ConnectionId, p2InitSetup);
+        //SendToClient((int)Player1.ConnectionId, p2InitSetup);
 
         SendToClient((int)Player2.ConnectionId, p1InitSetup);
-        SendToClient((int)Player2.ConnectionId, p2InitSetup);
+        //SendToClient((int)Player2.ConnectionId, p2InitSetup);
     }
 
     public void SendToClient(int cnnId, NetMsg msg)
     {
-        byte[] buffer = MsgSerializer.SerializeNetMsg(msg, MSG_BYTE_SIZE);
+        byte[] buffer = MsgSerializer.SerializeNetMsg(msg, 1600);
 
-        NetworkTransport.Send(_hostId, cnnId, _reliableChannel, buffer, MSG_BYTE_SIZE, out _error);
+        NetworkTransport.Send(_hostId, cnnId, _reliableChannel, buffer, 1600, out _error);
+        Debug.Log((NetworkError)_error);
     }
 
     public PlayerManager GetPlayer(int cnnId)
@@ -201,6 +202,21 @@ public class Server : ManagedBehaviour<Server> {
             return Player2;
 
         return null;
+    }
+
+    public void TestSerialize()
+    {
+        GameInstance.InitializeGame(Player1.PlayerInfo, Player2.PlayerInfo, new Deck(CardCache.Instance, 20, true, true));
+        var p1InitSetup = new InitSetupNetMsg()
+        {
+            PlayerNumber = PlayerOrdinal.Player1,
+            PlayerNumber2 = PlayerOrdinal.Player2,
+            PlayerSetup = GameInstance.P1Setup
+        };
+        
+
+        MsgSerializer.SerializeNetMsg(p1InitSetup, 1600);
+        SendToClient((int)Player1.ConnectionId, p1InitSetup);
     }
 
 }

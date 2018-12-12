@@ -53,28 +53,27 @@ public class GameInstanceManager : MonoBehaviour
 
     public Stack<Turn> P1Turns { get; private set; }
     public Stack<Turn> P2Turns { get; private set; }
-    public InitGameSetup InitSetup { get; private set; }
+    public PlayerStateUpdate P1Setup { get; private set; }
+    public PlayerStateUpdate P2Setup { get; private set; }
 
-    public InitGameSetup InitializeGame(PlayerInfo p1, PlayerInfo p2, Deck deck)
+    public void InitializeGame(PlayerInfo p1, PlayerInfo p2, Deck deck)
     {
         Deck = deck;
-        InitSetup = new InitGameSetup
-        {
-            P1Setup = CreateInitPlayerStateUpdate(p1),
-            P2Setup = CreateInitPlayerStateUpdate(p2)
-        };
-
-        return InitSetup;
+        P1Setup = CreateInitPlayerStateUpdate(p1);
+        P2Setup = CreateInitPlayerStateUpdate(p2);
     }
 
-    public void InitializePlayer(PlayerOrdinal playerNumber, PlayerStateUpdate setup)
+    public void SetPlayerSetup(PlayerOrdinal playerNumber, PlayerStateUpdate setup)
     {
-        if (InitSetup == null)
-            InitSetup = new InitGameSetup { P1Setup = p1Setup, P2Setup = p2Setup };
-        ApplyStateUpdate(PlayerOrdinal.Player1, p1Setup);
-        ApplyStateUpdate(PlayerOrdinal.Player2, p2Setup);
-        Debug.Log("Player1 Dragon: " + Game.Player1Setup.Dragon.DragonId);
-        Debug.Log("Player2 Dragon: " + Game.Player2Setup.Dragon.DragonId);
+        if (playerNumber == PlayerOrdinal.Player1)
+        {
+            P1Setup = setup;
+            Debug.Log("Initialized Player1 setup. Dragon: " + setup.NewDragonEquip);
+        } else
+        {
+            P2Setup = setup;
+            Debug.Log("Initialized Player2 setup. Dragon: " + setup.NewDragonEquip);
+        }
 
     }
 
@@ -108,21 +107,6 @@ public class GameInstanceManager : MonoBehaviour
         return playerState;
     }
 
-    public CircleUpdate CreateEmptyCircleUpdate(int index)
-    {
-        CircleUpdate update = new CircleUpdate();
-
-        Array values = Enum.GetValues(typeof(CircleColor));
-        System.Random random = new System.Random();
-        CircleColor randColor = (CircleColor)values.GetValue(random.Next(values.Length));
-
-        update.NewColor = randColor;
-        update.CircleIndex = index;
-        update.NewCard = null;
-        update.CardHpChange = null;
-
-        return update;
-    }
 
     private void ApplyStateUpdate(PlayerOrdinal player, PlayerStateUpdate update)
     {
@@ -131,6 +115,22 @@ public class GameInstanceManager : MonoBehaviour
         playerSetup.Circles = UpdateCircles(playerSetup.Circles, update.CircleChanges);
     }
 
+    #region Static game managment functions
+    public static CircleUpdate CreateEmptyCircleUpdate(int index)
+    {
+        CircleUpdate update = new CircleUpdate();
+
+        Array values = Enum.GetValues(typeof(CircleColor));
+        System.Random random = new System.Random();
+        CircleColor randColor = (CircleColor)values.GetValue(random.Next(values.Length));
+
+        update.NewColor = (byte)randColor;
+        update.CircleIndex = (byte)index;
+        update.NewCard = null;
+        update.CardHpChange = null;
+
+        return update;
+    }
 
     public static Circle[] UpdateCircles(Circle[] circles, CircleUpdate[] updates)
     {
@@ -150,74 +150,13 @@ public class GameInstanceManager : MonoBehaviour
     public static Circle UpdateCircle(Circle circle, CircleUpdate update)
     {
         if (update.NewColor != null)
-            { circle.Color = (CircleColor)update.NewColor; }
+            { circle.Color = (byte)update.NewColor; }
         if (update.NewCard != null)
             { circle.Card = update.NewCard; }
         else if (update.CardHpChange != null)
-            { circle.Card.HP += (int)update.CardHpChange; }
+            { circle.Card.HP = (byte)((int)circle.Card.HP + (int)update.CardHpChange); }
         return circle;
     }
+    #endregion
 }
 
-
-
-public class OldServerGameInstanceManager : OldGameInstanceManager
-{
-    public Deck Deck { get; set; }
-    // the initial update sent to both player to setup the game board
-    public InitGameSetup InitSetup { get; private set; }
-
-    public InitGameSetup CreateInitSetup()
-    {
-        InitSetup = new InitGameSetup
-        {
-            P1Setup = CreateInitPlayerStateUpdate(),
-            P2Setup = CreateInitPlayerStateUpdate()
-        };
-
-        return InitSetup;
-    }
-
-    private PlayerStateUpdate CreateInitPlayerStateUpdate()
-    {
-        PlayerStateUpdate playerState = new PlayerStateUpdate();
-        // create empty circles
-        CircleUpdate[] circles = new CircleUpdate[6];
-        for (int i = 0; i < 6; i++)
-        {
-            circles[i] = CreateEmptyCircleUpdate(i);
-        }
-
-        // draw initial cards
-        string[] drawnCards = new string[5];
-        for (int i = 0; i < 5; i++)
-        {
-            drawnCards[i] = Deck.DrawCard().id;
-        }
-
-        playerState.CircleChanges = circles;
-        playerState.DrawnCards = drawnCards;
-
-        return playerState;
-    }
-
-    public CircleUpdate CreateEmptyCircleUpdate(int index)
-    {
-        CircleUpdate update = new CircleUpdate();
-
-        Array values = Enum.GetValues(typeof(CircleColor));
-        System.Random random = new System.Random();
-        CircleColor randColor = (CircleColor)values.GetValue(random.Next(values.Length));
-
-        update.NewColor = randColor;
-        update.CircleIndex = index;
-        update.NewCard = null;
-        update.CardHpChange = null;
-
-        return update;
-    }
-
-     
-
-
-}

@@ -21,7 +21,7 @@ public class Client : ManagedBehaviour<Client> {
     public PlayerGameInstance PlayerSetup { get; private set; }
     public bool IsOnline { get; private set; }
 
-    public const int MSG_BYTE_SIZE = 1024;
+    public const int MSG_BYTE_SIZE = 1400;
 
     private int _hostId;
     private int _connectionId;
@@ -40,7 +40,7 @@ public class Client : ManagedBehaviour<Client> {
         NetworkTransport.Init();
 
         ConnectionConfig cc = new ConnectionConfig();
-        _reliableChannel = cc.AddChannel(QosType.Reliable);
+        _reliableChannel = cc.AddChannel(QosType.Unreliable);
 
         HostTopology hostTopology = new HostTopology(cc, 100);
 
@@ -78,11 +78,12 @@ public class Client : ManagedBehaviour<Client> {
             return;
 
         int recHostId, cnnId, channelId;
-        byte[] recBuffer = new byte[MSG_BYTE_SIZE];
-        int bufferSize = MSG_BYTE_SIZE;
+        byte[] dataBuffer = new byte[5000];
         int dataSize;
 
-        NetworkEventType networkEventType = NetworkTransport.Receive(out recHostId, out cnnId, out channelId, recBuffer, bufferSize, out dataSize, out _error);
+        NetworkEventType networkEventType = 
+            NetworkTransport.Receive(out recHostId, out cnnId, out channelId, 
+            dataBuffer, dataBuffer.Length, out dataSize, out _error);
         switch (networkEventType)
         {
             case NetworkEventType.Nothing:
@@ -94,7 +95,7 @@ public class Client : ManagedBehaviour<Client> {
                 Debug.Log(string.Format("Disconnected from game server", cnnId));
                 break;
             case NetworkEventType.DataEvent:
-                NetMsg netMsg = MsgSerializer.DeserializeNetMsg(recBuffer);
+                NetMsg netMsg = MsgSerializer.DeserializeNetMsg(dataBuffer);
                 OnData(cnnId, channelId, recHostId, netMsg);
                 break;
             case NetworkEventType.BroadcastEvent:
@@ -103,7 +104,7 @@ public class Client : ManagedBehaviour<Client> {
         }
     }
 
-    #region OnConnect
+    #region Connect & Disconnect
 
     private void OnConnect(int cnnId, int channelId, int hostId, int error)
     {
@@ -112,6 +113,13 @@ public class Client : ManagedBehaviour<Client> {
         msg.PlayerInfo = PlayerManager.PlayerInfo;
 
         SendToServer(msg);
+    }
+
+    private void OnDisconnect(int cnnId, int channelId, int hostId, int error)
+    {
+        Debug.Log("Disconnected from Server");
+        PlayerManager.SetDisconnected();
+        IsOnline = false;
     }
 
     #endregion
@@ -135,7 +143,7 @@ public class Client : ManagedBehaviour<Client> {
                 Debug.Log("DOG CAT");
                 break;
             case NetOP.SetPlayerNumber:
-                PlayerManager.PlayerNumber = ((SetPlayerNumberNetMsg)netMsg).PlayerNumber;
+                PlayerManager.SetConnected(cnnId, ((SetPlayerNumberNetMsg)netMsg).PlayerNumber);
                 break;
 
             default:
@@ -153,22 +161,21 @@ public class Client : ManagedBehaviour<Client> {
     {
         Debug.Log("Eager baby dog");
         //InitGameBoardMsg msg = (InitGameBoardMsg)netMsg;
-        PlayerManager.SetConnected(cnnId, initSetupMsg.ClientPlayerNumber);
-        GameInstance.InitializeGame(initSetupMsg.InitSetup);
 
+        GameInstance.SetPlayerSetup(initSetupMsg.PlayerNumber, initSetupMsg.PlayerSetup);
     }
 
     #endregion
 
     public void SendToServer(NetMsg msg)
     {
-        byte[] buffer = new byte[MSG_BYTE_SIZE];
+        byte[] buffer = MsgSerializer.SerializeNetMsg(msg, MSG_BYTE_SIZE);
 
-        BinaryFormatter formatter = new BinaryFormatter();
-        MemoryStream memStream = new MemoryStream(buffer);
-        formatter.Serialize(memStream, msg);
+        //Debug.Log("Buffer Length: " + buffer.Length);
 
         NetworkTransport.Send(_hostId, _connectionId, _reliableChannel, buffer, MSG_BYTE_SIZE, out _error);
+
+        //Debug.LogError((NetworkError)_error);
     }
 
 }

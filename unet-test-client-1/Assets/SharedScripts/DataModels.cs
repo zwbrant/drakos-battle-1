@@ -31,11 +31,11 @@ public class PlayerGameInstance
 public class PlayerStateUpdate
 {
     public string NewDragonEquip { get; set; }
-    public int? DragonHpChange { get; set; }
-    public int? DragonEnergyChange { get; set; }
+    public sbyte? DragonHpChange { get; set; }
+    public sbyte? DragonEnergyChange { get; set; }
 
     public CircleUpdate[] CircleChanges { get; set; }
-    public int? CircleRotation { get; set; }
+    public byte? CircleRotation { get; set; }
 
     public string[] DrawnCards { get; set; }
     public string[] DiscardedCards { get; set; }
@@ -44,7 +44,7 @@ public class PlayerStateUpdate
 [Serializable]
 public class Turn
 {
-    public int TurnNumber { get; set; }
+    public byte TurnNumber { get; set; }
     public PlayerOrdinal PlayerNumber { get; set; }  
     public PlayerStateUpdate StateUpdate { get; set; }
 }
@@ -123,43 +123,41 @@ public class Card
     public int cost { get; set; }
     public string color { get; set; }
     public int power { get; set; }
-
+    
     public Ability ability { get; set; }
 }
 
 [Serializable]
 public class Circle
 {
-    public int CircleIndex { get; set; }
-    public CircleColor Color { get; set; }
+    public byte CircleIndex { get; set; }
+    public byte Color { get; set; }
     public PlacedCard Card { get; set; }
 }
 
 [Serializable]
 public class CircleUpdate
 {
-    public int CircleIndex { get; set; }
-    public CircleColor? NewColor { get; set; }
+    public byte CircleIndex { get; set; }
+    public byte? NewColor { get; set; }
     public PlacedCard NewCard { get; set; }
-    public int? CardHpChange { get; set; }
-
+    public sbyte? CardHpChange { get; set; }
 }
 
 [Serializable]
 public class PlacedDragon
 {
     public string DragonId { get; set; }
-    public int HP { get; set; }
-    public int Energy { get; set; }
+    public byte HP { get; set; }
+    public byte Energy { get; set; }
 }
 
 [Serializable]
 public class PlacedCard
 {
     public string CardId { get; set; }
-    public int HP { get; set; }
+    public byte HP { get; set; }
 }
-
 
 [Serializable]
 public enum CircleColor : byte
