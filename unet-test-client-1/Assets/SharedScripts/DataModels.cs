@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine;
 
 #region Game Level
 
@@ -42,11 +43,25 @@ public class PlayerStateUpdate
 }
 
 [Serializable]
-public class Turn
+public class DragonStateUpdate
 {
-    public byte TurnNumber { get; set; }
-    public PlayerOrdinal PlayerNumber { get; set; }  
-    public PlayerStateUpdate StateUpdate { get; set; }
+    public string NewDragonEquip { get; set; }
+    public sbyte? DragonHpChange { get; set; }
+    public sbyte? DragonEnergyChange { get; set; }
+}
+
+[Serializable]
+public class CirclesStateUpdate
+{
+    public CircleUpdate[] CircleChanges { get; set; }
+    public byte? CircleRotation { get; set; }
+}
+
+[Serializable]
+public class CardsStateUpdate
+{
+    public string[] DrawnCards { get; set; }
+    public string[] DiscardedCards { get; set; }
 }
 
 [Serializable]
@@ -61,8 +76,6 @@ public enum PlayerOrdinal : byte
     Player1,
     Player2
 }
-
-
 
 #endregion
 

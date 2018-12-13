@@ -149,6 +149,7 @@ public class Server : ManagedBehaviour<Server> {
             return;
         }
 
+        // Save player's information
         player.PlayerInfo = netMsg.PlayerInfo;
         Debug.Log(string.Format("Player {0} equipped dragon {1}", player.PlayerNumber, player.PlayerInfo.EquippedDragonId));
 
@@ -162,36 +163,46 @@ public class Server : ManagedBehaviour<Server> {
 
     public void StartGame()
     {
+        SendToClient((int)Player1.ConnectionId, new NetMsg(NetOP.GameInit));
+        SendToClient((int)Player2.ConnectionId, new NetMsg(NetOP.GameInit));
+
         GameInstance.InitializeGame(Player1.PlayerInfo, Player2.PlayerInfo, new Deck(CardCache.Instance, 20, true, true));
-        var p1InitSetup = new InitSetupNetMsg()
+
+        var dragonUpdate1 = new DragonStateUpdate()
         {
-            PlayerNumber = PlayerOrdinal.Player1,
-            PlayerSetup = GameInstance.P1Setup
+            NewDragonEquip = GameInstance.P1Setup.NewDragonEquip
         };
-        var p2InitSetup = new InitSetupNetMsg()
+
+        var dragonUpdate2 = new DragonStateUpdate()
+        {
+            NewDragonEquip = GameInstance.P2Setup.NewDragonEquip
+        };
+
+        var dragonMsg1 = new DragonUpdateNetMsg() {
+            PlayerNumber = PlayerOrdinal.Player1,
+            DragonUpdate = dragonUpdate1
+        };
+        var dragonMsg2 = new DragonUpdateNetMsg()
         {
             PlayerNumber = PlayerOrdinal.Player2,
-            PlayerSetup = GameInstance.P2Setup
+            DragonUpdate = dragonUpdate2
         };
-        Debug.Log("Jiggly Bean");
 
-        SendToClient((int)Player1.ConnectionId, new SetPlayerNumberNetMsg() { PlayerNumber = PlayerOrdinal.Player1 });
-        SendToClient((int)Player2.ConnectionId, new SetPlayerNumberNetMsg() { PlayerNumber = PlayerOrdinal.Player2 });
-
-
-        SendToClient((int)Player1.ConnectionId, p1InitSetup);
-        //SendToClient((int)Player1.ConnectionId, p2InitSetup);
-
-        SendToClient((int)Player2.ConnectionId, p1InitSetup);
-        //SendToClient((int)Player2.ConnectionId, p2InitSetup);
+        Debug.Log("Sending Initial UPDATES");
+        SendToClient((int)Player1.ConnectionId, dragonMsg1);
+        SendToClient((int)Player1.ConnectionId, dragonMsg2);
+        SendToClient((int)Player2.ConnectionId, dragonMsg1);
+        SendToClient((int)Player2.ConnectionId, dragonMsg2);
     }
 
     public void SendToClient(int cnnId, NetMsg msg)
     {
-        byte[] buffer = MsgSerializer.SerializeNetMsg(msg, 1600);
+        byte[] buffer = MsgSerializer.SerializeObject(msg, MSG_BYTE_SIZE);
 
-        NetworkTransport.Send(_hostId, cnnId, _reliableChannel, buffer, 1600, out _error);
-        Debug.Log((NetworkError)_error);
+        NetworkTransport.Send(_hostId, cnnId, _reliableChannel, buffer, MSG_BYTE_SIZE, out _error);
+
+        if (_error != 0)
+            Debug.Log((NetworkError)_error);
     }
 
     public PlayerManager GetPlayer(int cnnId)
@@ -206,17 +217,20 @@ public class Server : ManagedBehaviour<Server> {
 
     public void TestSerialize()
     {
-        GameInstance.InitializeGame(Player1.PlayerInfo, Player2.PlayerInfo, new Deck(CardCache.Instance, 20, true, true));
-        var p1InitSetup = new InitSetupNetMsg()
+        var car = new CardsStateUpdate();
+        car.DrawnCards = new string[] { "sad sa", "asd", "sda" };
+        car.DiscardedCards = new string[] { "sad sa", "asd", "sda" };
+
+        var dog = new CardsUpdateNetMsg()
         {
-            PlayerNumber = PlayerOrdinal.Player1,
-            PlayerNumber2 = PlayerOrdinal.Player2,
-            PlayerSetup = GameInstance.P1Setup
+            CardsUpdate = car
         };
+
+        byte[] netMsg = MsgSerializer.SerializeObject(dog, 5000);
+        byte[] obj = MsgSerializer.SerializeObject(car, 5000);
+
         
 
-        MsgSerializer.SerializeNetMsg(p1InitSetup, 1600);
-        SendToClient((int)Player1.ConnectionId, p1InitSetup);
     }
 
 }

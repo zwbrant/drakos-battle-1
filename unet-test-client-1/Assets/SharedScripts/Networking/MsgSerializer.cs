@@ -6,13 +6,13 @@ using UnityEngine;
 
 public static class MsgSerializer {
 
-    public static byte[] SerializeNetMsg(NetMsg netMsg, int byteSize)
+    public static byte[] SerializeObject(object obj, int byteSize)
     {
         byte[] buffer = new byte[byteSize];
 
         BinaryFormatter formatter = new BinaryFormatter();
         MemoryStream memStream = new MemoryStream(buffer);
-        formatter.Serialize(memStream, netMsg);
+        formatter.Serialize(memStream, obj);
 
         return buffer;
     }

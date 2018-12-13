@@ -16,7 +16,9 @@ public class Client : ManagedBehaviour<Client> {
     public ClientGameState OnConnectedState;
 
     public GameInstanceManager GameInstance;
+    public GameEventDispatcher EventDispatcher;
     public PlayerManager PlayerManager;
+
 
     public PlayerGameInstance PlayerSetup { get; private set; }
     public bool IsOnline { get; private set; }
@@ -45,8 +47,6 @@ public class Client : ManagedBehaviour<Client> {
         HostTopology hostTopology = new HostTopology(cc, 100);
 
         _hostId = NetworkTransport.AddHost(hostTopology, 0);
-
-
     }
 
     public void Connnect()
@@ -78,7 +78,7 @@ public class Client : ManagedBehaviour<Client> {
             return;
 
         int recHostId, cnnId, channelId;
-        byte[] dataBuffer = new byte[5000];
+        byte[] dataBuffer = new byte[MSG_BYTE_SIZE];
         int dataSize;
 
         NetworkEventType networkEventType = 
@@ -108,6 +108,8 @@ public class Client : ManagedBehaviour<Client> {
 
     private void OnConnect(int cnnId, int channelId, int hostId, int error)
     {
+        SceneManager.LoadScene("Battle");
+
         Debug.Log("Connected to Server");
         PlayerInfoNetMsg msg = new PlayerInfoNetMsg();
         msg.PlayerInfo = PlayerManager.PlayerInfo;
@@ -129,53 +131,69 @@ public class Client : ManagedBehaviour<Client> {
     {
         switch (netMsg.OP)
         {
-            case NetOP.CardDealt:
-                Debug.Log("OnData: CardDealt");
-                break;
-            case NetOP.PlayersJoined:
-                Debug.Log("OnData: PlayersJoined");
-                OnPlayersJoined(cnnId, channelId, hostId, netMsg);
-                break;
-            case NetOP.InitSetup:
-                OnGameInit(cnnId, channelId, hostId, (InitSetupNetMsg)netMsg);
-                break;
-            case NetOP.TotalStateUpdate:
-                Debug.Log("DOG CAT");
+            case NetOP.GameInit:
+                OnGameInit(cnnId, channelId, hostId);
                 break;
             case NetOP.SetPlayerNumber:
                 PlayerManager.SetConnected(cnnId, ((SetPlayerNumberNetMsg)netMsg).PlayerNumber);
+                EventDispatcher.Init(((SetPlayerNumberNetMsg)netMsg).PlayerNumber);
                 break;
-
+            case NetOP.DragonUpdate:
+                OnGameUpdate((GameUpdateNetMsg)netMsg);
+                break;
+            case NetOP.CirclesUpdate:
+                OnGameUpdate((GameUpdateNetMsg)netMsg);
+                break;
+            case NetOP.CardsUpdate:
+                OnGameUpdate((GameUpdateNetMsg)netMsg);
+                break;
             default:
                 break;
 
         }
     }
 
-    public void OnPlayersJoined(int cnnId, int channelId, int hostId, NetMsg netMsg)
+    private void OnGameUpdate(GameUpdateNetMsg updateMsg)
     {
+        Debug.LogWarning("WHITE BOI");
+        bool isOpponentTurn = (updateMsg.PlayerNumber != PlayerManager.PlayerNumber);
+        // consume data
+        switch (updateMsg.OP)
+        {
+            case NetOP.DragonUpdate:
+                EventDispatcher.ProcessDragonUpdate(((DragonUpdateNetMsg)updateMsg).DragonUpdate, isOpponentTurn);
+                break;
+            case NetOP.CirclesUpdate:
+                EventDispatcher.ProcessCirclesUpdate(((CirclesUpdateNetMsg)updateMsg).CirclesUpdate, isOpponentTurn);
+                break;
+            case NetOP.CardsUpdate:
+                EventDispatcher.ProcessCardsUpdate(((CardsUpdateNetMsg)updateMsg).CardsUpdate, isOpponentTurn);
+                break;
+            default:
+                return;
+        }
+
+        
 
     }
 
-    public void OnGameInit(int cnnId, int channelId, int hostId, InitSetupNetMsg initSetupMsg)
-    {
-        Debug.Log("Eager baby dog");
-        //InitGameBoardMsg msg = (InitGameBoardMsg)netMsg;
 
-        GameInstance.SetPlayerSetup(initSetupMsg.PlayerNumber, initSetupMsg.PlayerSetup);
+    public void OnGameInit(int cnnId, int channelId, int hostId)
+    {
+        Debug.Log("Initializing Game");
+        EventDispatcher.OnGameInit();
     }
 
     #endregion
 
     public void SendToServer(NetMsg msg)
     {
-        byte[] buffer = MsgSerializer.SerializeNetMsg(msg, MSG_BYTE_SIZE);
-
-        //Debug.Log("Buffer Length: " + buffer.Length);
+        byte[] buffer = MsgSerializer.SerializeObject(msg, MSG_BYTE_SIZE);
 
         NetworkTransport.Send(_hostId, _connectionId, _reliableChannel, buffer, MSG_BYTE_SIZE, out _error);
 
-        //Debug.LogError((NetworkError)_error);
+        if (_error != 0)
+            Debug.Log((NetworkError)_error);
     }
 
 }

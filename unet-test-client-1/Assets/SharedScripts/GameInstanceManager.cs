@@ -56,6 +56,9 @@ public class GameInstanceManager : MonoBehaviour
     public PlayerStateUpdate P1Setup { get; private set; }
     public PlayerStateUpdate P2Setup { get; private set; }
 
+    public Turn CurrPlayerTurn;
+    public Turn CurrOponentTurn;
+
     public void InitializeGame(PlayerInfo p1, PlayerInfo p2, Deck deck)
     {
         Deck = deck;
@@ -107,13 +110,14 @@ public class GameInstanceManager : MonoBehaviour
         return playerState;
     }
 
-
     private void ApplyStateUpdate(PlayerOrdinal player, PlayerStateUpdate update)
     {
         var playerSetup = (player == PlayerOrdinal.Player1) ? Game.Player1Setup : Game.Player2Setup;
 
         playerSetup.Circles = UpdateCircles(playerSetup.Circles, update.CircleChanges);
     }
+
+
 
     #region Static game managment functions
     public static CircleUpdate CreateEmptyCircleUpdate(int index)

@@ -4,7 +4,7 @@ using UnityEngine;
 
 public enum ClientGameState : byte {
     AwaitingOpponentJoin,
-    CardSetup,
+    SetupPhase,
     PlayerSetupReady,
     PlayerTurn,
     PlayerAttack,
