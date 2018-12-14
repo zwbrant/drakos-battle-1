@@ -122,6 +122,8 @@ GameObject:
   m_Component:
   - component: {fileID: 23130748}
   - component: {fileID: 23130749}
+  - component: {fileID: 23130747}
+  - component: {fileID: 23130750}
   m_Layer: 0
   m_Name: Client
   m_TagString: Untagged
@@ -129,6 +131,34 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!114 &23130747
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 23130746}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c5f7f3fc7ad51a047a624d99af0d25e5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Event: {fileID: 11400000, guid: c8ef23768b6665640b1f01e09a63c893, type: 2}
+  Response:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 23130749}
+        m_MethodName: Disconnect
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
 --- !u!4 &23130748
 Transform:
   m_ObjectHideFlags: 0
@@ -158,10 +188,40 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   IPAddress: {fileID: 11400000, guid: 3d1cb87b5f6153747ad4066078118afd, type: 2}
   Port: {fileID: 11400000, guid: eb5ddd04855365f4f836a316c368f723, type: 2}
-  OnConnectedState: 0
+  OnConnectedEvent: {fileID: 11400000, guid: 3bb33348903a3a640a7aef4ef30d2d5a, type: 2}
+  OnDisconnectedEvent: {fileID: 11400000, guid: 1e6fbf3290bfa8941b0435493f308635,
+    type: 2}
   GameInstance: {fileID: 162117525}
   EventDispatcher: {fileID: 1821387329}
   PlayerManager: {fileID: 1931256499}
+--- !u!114 &23130750
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 23130746}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c5f7f3fc7ad51a047a624d99af0d25e5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Event: {fileID: 11400000, guid: 50564a7550ad014458dab200debe3b73, type: 2}
+  Response:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 23130749}
+        m_MethodName: Connnect
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
 --- !u!1 &162117523
 GameObject:
   m_ObjectHideFlags: 0
@@ -749,8 +809,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 23130749}
-        m_MethodName: Connnect
+      - m_Target: {fileID: 11400000, guid: 50564a7550ad014458dab200debe3b73, type: 2}
+        m_MethodName: Raise
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -1477,6 +1537,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1056522334}
   - component: {fileID: 1056522335}
+  - component: {fileID: 1056522336}
   m_Layer: 0
   m_Name: SceneManager
   m_TagString: Untagged
@@ -1510,22 +1571,38 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   SceneLoadResponses:
   - Scene: Battle
-    Response:
-      m_PersistentCalls:
-        m_Calls:
-        - m_Target: {fileID: 11400000, guid: e4a2bbe4af3f8874dbef60273268769c, type: 2}
-          m_MethodName: 
-          m_Mode: 1
-          m_Arguments:
-            m_ObjectArgument: {fileID: 0}
-            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-            m_IntArgument: 0
-            m_FloatArgument: 0
-            m_StringArgument: 
-            m_BoolArgument: 0
-          m_CallState: 2
-      m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
-        Culture=neutral, PublicKeyToken=null
+    EventOnLoad: {fileID: 0}
+    RaiseStateEventOnLoad: 1
+    StateOnLoad: 0
+  GameStateEvent: {fileID: 0}
+--- !u!114 &1056522336
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1056522333}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c5f7f3fc7ad51a047a624d99af0d25e5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Event: {fileID: 11400000, guid: 1e6fbf3290bfa8941b0435493f308635, type: 2}
+  Response:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1056522335}
+        m_MethodName: LoadScene
+        m_Mode: 5
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: Lobby
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
 --- !u!1 &1076364099
 GameObject:
   m_ObjectHideFlags: 0
@@ -2355,7 +2432,7 @@ MonoBehaviour:
   OpponentTurnReceivedEvent:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 11400000, guid: 54e9648715596ee409f347e896775d3c, type: 2}
+      - m_Target: {fileID: 11400000, guid: 90605a80160e83447be904f3ad8424f6, type: 2}
         m_MethodName: Raise
         m_Mode: 1
         m_Arguments:

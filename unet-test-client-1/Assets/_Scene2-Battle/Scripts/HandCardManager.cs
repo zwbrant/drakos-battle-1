@@ -9,6 +9,8 @@ public class HandCardManager : MonoBehaviour {
     public StringArrayEvent UpdateCardsEvent;
     public Vector3 LocalSpawnPosition = Vector3.zero;
 
+    public Turn TurnSource;
+
     public void SpawnCard(Card card)
     {
         // check if 
@@ -23,6 +25,7 @@ public class HandCardManager : MonoBehaviour {
         cardObj.transform.localPosition = LocalSpawnPosition;
 
         HandCardItem cardItem = cardObj.GetComponent<HandCardItem>();
+        cardItem.transform.SetParent(container.transform, false);
         cardItem.Initialize(card);
 
         cardItem.gameObject.SetActive(true);
@@ -32,11 +35,22 @@ public class HandCardManager : MonoBehaviour {
 
     public void DrawCards(string[] cardIds)
     {
-        throw new System.NotImplementedException();
+        for (int i = 0; i < cardIds.Length; i++)
+        {
+            SpawnCard(CardCache.GetCardById(cardIds[i]));
+        }
     }
 
     public void DiscardCards(string[] cardIds)
     {
         throw new System.NotImplementedException();
+    }
+
+    public void ConsumeTurn()
+    {
+        Debug.Log("HandCardManager: " + TurnSource.name);
+        var cardsUpdate = TurnSource.CardsUpdate;
+
+        DrawCards(cardsUpdate.DrawnCards);
     }
 }

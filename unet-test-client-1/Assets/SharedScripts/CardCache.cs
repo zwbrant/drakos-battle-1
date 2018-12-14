@@ -6,17 +6,17 @@ public class CardCache : Cache<Card> {
 
 
 
-    //public static bool TryGetDragonByID(string id, ref Dragon dragon)
-    //{
-    //    if (!Instance.Ready)
-    //    {
-    //        Debug.LogError(string.Format("DragonCache Not Ready: Cannot find Dragon {0}", id));
-    //        return false;
-    //    }
-        
-    //    dragon = Instance.Objects.Find(item => item.id == id);
-    //    return (dragon != null);
-    //}
+
+    public static Card GetCardById(string id)
+    {
+        if (!Instance.Ready)
+        {
+            Debug.LogError(string.Format("DragonCache Not Ready: Cannot find Dragon {0}", id));
+            return null;
+        }
+
+        return Instance.Objects.Find(item => item.id == id);
+    }
 
     public void PrintObjects()
     {

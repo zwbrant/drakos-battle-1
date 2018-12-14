@@ -151,7 +151,7 @@ public class Server : ManagedBehaviour<Server> {
 
         // Save player's information
         player.PlayerInfo = netMsg.PlayerInfo;
-        Debug.Log(string.Format("Player {0} equipped dragon {1}", player.PlayerNumber, player.PlayerInfo.EquippedDragonId));
+        Debug.Log(string.Format("{0} equipped dragon {1}", player.PlayerNumber, player.PlayerInfo.EquippedDragonId));
 
         if (Player1.IsReadyToBattle() && Player2.IsReadyToBattle())
         {
@@ -163,36 +163,45 @@ public class Server : ManagedBehaviour<Server> {
 
     public void StartGame()
     {
+        // let em' know we're starting the game
         SendToClient((int)Player1.ConnectionId, new NetMsg(NetOP.GameInit));
         SendToClient((int)Player2.ConnectionId, new NetMsg(NetOP.GameInit));
 
         GameInstance.InitializeGame(Player1.PlayerInfo, Player2.PlayerInfo, new Deck(CardCache.Instance, 20, true, true));
 
-        var dragonUpdate1 = new DragonStateUpdate()
-        {
-            NewDragonEquip = GameInstance.P1Setup.NewDragonEquip
-        };
-
-        var dragonUpdate2 = new DragonStateUpdate()
-        {
-            NewDragonEquip = GameInstance.P2Setup.NewDragonEquip
-        };
-
-        var dragonMsg1 = new DragonUpdateNetMsg() {
-            PlayerNumber = PlayerOrdinal.Player1,
-            DragonUpdate = dragonUpdate1
-        };
-        var dragonMsg2 = new DragonUpdateNetMsg()
-        {
-            PlayerNumber = PlayerOrdinal.Player2,
-            DragonUpdate = dragonUpdate2
-        };
+        // send the initial (setup) turns
 
         Debug.Log("Sending Initial UPDATES");
-        SendToClient((int)Player1.ConnectionId, dragonMsg1);
-        SendToClient((int)Player1.ConnectionId, dragonMsg2);
-        SendToClient((int)Player2.ConnectionId, dragonMsg1);
-        SendToClient((int)Player2.ConnectionId, dragonMsg2);
+
+        SendTurnToPlayer(GameInstance.P1Turns.Peek(), Player1);
+        SendTurnToPlayer(GameInstance.P2Turns.Peek(), Player1);
+        SendTurnToPlayer(GameInstance.P1Turns.Peek(), Player2);
+        SendTurnToPlayer(GameInstance.P2Turns.Peek(), Player2);
+    }
+
+    // take a turn object, turn it into 3 seperate update net messages, then send them off
+    public void SendTurnToPlayer(Turn turn, PlayerManager recipient)
+    {
+        var dragonMsg = new DragonUpdateNetMsg()
+        {
+            PlayerNumber = turn.PlayerNumber,
+            DragonUpdate = turn.DragonUpdate
+        };
+        var circlesMsg = new CirclesUpdateNetMsg()
+        {
+            PlayerNumber = turn.PlayerNumber,
+            CirclesUpdate = turn.CirclesUpdate
+        };
+        var cardsMsg = new CardsUpdateNetMsg()
+        {
+            PlayerNumber = turn.PlayerNumber,
+            CardsUpdate = turn.CardsUpdate
+        };
+
+        SendToClient((int)recipient.ConnectionId, dragonMsg);
+        SendToClient((int)recipient.ConnectionId, circlesMsg);
+        SendToClient((int)recipient.ConnectionId, cardsMsg);
+
     }
 
     public void SendToClient(int cnnId, NetMsg msg)
@@ -217,18 +226,10 @@ public class Server : ManagedBehaviour<Server> {
 
     public void TestSerialize()
     {
-        var car = new CardsStateUpdate();
-        car.DrawnCards = new string[] { "sad sa", "asd", "sda" };
-        car.DiscardedCards = new string[] { "sad sa", "asd", "sda" };
 
-        var dog = new CardsUpdateNetMsg()
-        {
-            CardsUpdate = car
-        };
+        DragonUpdateNetMsg m = new DragonUpdateNetMsg();
 
-        byte[] netMsg = MsgSerializer.SerializeObject(dog, 5000);
-        byte[] obj = MsgSerializer.SerializeObject(car, 5000);
-
+        SendToClient((int)Player1.ConnectionId, m);
         
 
     }

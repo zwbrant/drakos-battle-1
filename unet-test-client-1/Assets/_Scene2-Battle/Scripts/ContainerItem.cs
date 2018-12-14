@@ -11,6 +11,7 @@ public class ContainerItem : MonoBehaviour
         get { return transform.childCount < 1; }
     }
 
+
     private void OnEnable()
     {
         Set.Add(this);

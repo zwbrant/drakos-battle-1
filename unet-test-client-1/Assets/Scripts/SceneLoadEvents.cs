@@ -8,12 +8,16 @@ using System;
 public class SceneLoadEvents : ManagedBehaviour<SceneLoadEvents> {
 
     public List<SceneResponse> SceneLoadResponses;
+    public GameStateEvent GameStateEvent;
 
     [Serializable]
     public struct SceneResponse
     {
         public string Scene;
-        public UnityEvent Response;
+
+        public Event EventOnLoad;
+        public bool RaiseStateEventOnLoad;
+        public ClientGameState StateOnLoad;
     }
 
     public override void Init()
@@ -30,9 +34,17 @@ public class SceneLoadEvents : ManagedBehaviour<SceneLoadEvents> {
 
     void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
-        var response = SceneLoadResponses.Find(item => item.Scene == scene.name).Response;
-        if (response != null)
-            response.Invoke();
+        var response = SceneLoadResponses.Find(item => item.Scene == scene.name);
+
+        if (GameStateEvent != null && response.RaiseStateEventOnLoad)
+            GameStateEvent.Raise(response.StateOnLoad);
+        if (response.EventOnLoad != null)
+            response.EventOnLoad.Raise();
+    }
+
+    public void LoadScene(string scene)
+    {
+        SceneManager.LoadScene(scene);
     }
 }
 

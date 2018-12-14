@@ -18,7 +18,7 @@ public class PlayerManager : MonoBehaviour {
     {
         ConnectionId = cnnId;
         PlayerNumber = playerNumber;
-        Debug.Log("Player set as " + playerNumber);
+        Debug.Log(string.Format("User {0} set as {1}", cnnId, playerNumber));
         IsConnected = true;
     }
 

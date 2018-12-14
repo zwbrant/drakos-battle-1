@@ -53,38 +53,40 @@ public class GameInstanceManager : MonoBehaviour
 
     public Stack<Turn> P1Turns { get; private set; }
     public Stack<Turn> P2Turns { get; private set; }
-    public PlayerStateUpdate P1Setup { get; private set; }
-    public PlayerStateUpdate P2Setup { get; private set; }
 
     public Turn CurrPlayerTurn;
     public Turn CurrOponentTurn;
 
+    public void ResetGame()
+    {
+        Deck = null;
+        Game = new GameInstance();
+        P1Turns = new Stack<Turn>();
+        P2Turns = new Stack<Turn>();
+    }
+
     public void InitializeGame(PlayerInfo p1, PlayerInfo p2, Deck deck)
     {
+        ResetGame();
+
         Deck = deck;
-        P1Setup = CreateInitPlayerStateUpdate(p1);
-        P2Setup = CreateInitPlayerStateUpdate(p2);
+
+        Turn initTurnP1 = CreateInitTurn(p1, PlayerOrdinal.Player1);
+        P1Turns.Push(initTurnP1);
+
+        Turn initTurnP2 = CreateInitTurn(p2, PlayerOrdinal.Player2);
+        P2Turns.Push(initTurnP2);
     }
 
-    public void SetPlayerSetup(PlayerOrdinal playerNumber, PlayerStateUpdate setup)
+    private Turn CreateInitTurn(PlayerInfo playerInfo, PlayerOrdinal playerNumber)
     {
-        if (playerNumber == PlayerOrdinal.Player1)
+        Turn initTurn = new Turn()
         {
-            P1Setup = setup;
-            Debug.Log("Initialized Player1 setup. Dragon: " + setup.NewDragonEquip);
-        } else
-        {
-            P2Setup = setup;
-            Debug.Log("Initialized Player2 setup. Dragon: " + setup.NewDragonEquip);
-        }
-
-    }
-
-    private PlayerStateUpdate CreateInitPlayerStateUpdate(PlayerInfo playerInfo)
-    {
-        PlayerStateUpdate playerState = new PlayerStateUpdate();
-
-        playerState.NewDragonEquip = playerInfo.EquippedDragonId;
+            PlayerNumber = playerNumber,
+            DragonUpdate = new DragonStateUpdate(),
+            CirclesUpdate = new CirclesStateUpdate(),
+            CardsUpdate = new CardsStateUpdate()
+        };
 
         // create empty circles
         CircleUpdate[] circles = new CircleUpdate[6];
@@ -100,14 +102,11 @@ public class GameInstanceManager : MonoBehaviour
             drawnCards[i] = Deck.DrawCard().id;
         }
 
-        playerState.DragonHpChange = null;
-        playerState.DragonEnergyChange = null;
-        playerState.CircleRotation = null;
-        playerState.CircleChanges = circles;
-        playerState.DrawnCards = drawnCards;
-        playerState.DiscardedCards = null;
+        initTurn.DragonUpdate.NewDragonEquip = playerInfo.EquippedDragonId;
+        initTurn.CirclesUpdate.CircleChanges = circles;
+        initTurn.CardsUpdate.DrawnCards = drawnCards;
 
-        return playerState;
+        return initTurn;
     }
 
     private void ApplyStateUpdate(PlayerOrdinal player, PlayerStateUpdate update)

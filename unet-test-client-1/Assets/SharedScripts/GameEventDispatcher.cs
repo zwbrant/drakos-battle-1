@@ -16,6 +16,12 @@ public class GameEventDispatcher : MonoBehaviour
     public Turn CurrPlayerTurn;
     public Turn CurrOpponentTurn;
 
+    public void Start()
+    {
+        ResetTurn(ref CurrOpponentTurn);
+        ResetTurn(ref CurrPlayerTurn);
+    }
+
     public void Init(PlayerOrdinal localPlayerNumber)
     {
         ResetTurn(ref CurrOpponentTurn);
@@ -30,6 +36,8 @@ public class GameEventDispatcher : MonoBehaviour
     public void ProcessDragonUpdate(DragonStateUpdate update, bool isOpponentTurn)
     {
         Turn turn = (isOpponentTurn) ? CurrOpponentTurn : CurrPlayerTurn;
+        if (turn.HasBeenConsumed)
+            ResetTurn(ref turn);
 
         turn.DragonUpdate = update;
         turn.HasBeenConsumed = false;
@@ -40,6 +48,8 @@ public class GameEventDispatcher : MonoBehaviour
     public void ProcessCirclesUpdate(CirclesStateUpdate update, bool isOpponentTurn)
     {
         Turn turn = (isOpponentTurn) ? CurrOpponentTurn : CurrPlayerTurn;
+        if (turn.HasBeenConsumed)
+            ResetTurn(ref turn);
 
         turn.CirclesUpdate = update;
         turn.HasBeenConsumed = false;
@@ -50,6 +60,8 @@ public class GameEventDispatcher : MonoBehaviour
     public void ProcessCardsUpdate(CardsStateUpdate update, bool isOpponentTurn)
     {
         Turn turn = (isOpponentTurn) ? CurrOpponentTurn : CurrPlayerTurn;
+        if (turn.HasBeenConsumed)
+            ResetTurn(ref turn);
 
         turn.CardsUpdate = update;
         turn.HasBeenConsumed = false;
@@ -74,7 +86,6 @@ public class GameEventDispatcher : MonoBehaviour
             turn.HasBeenConsumed = true;
         }
 
-        ResetTurn(ref turn);
     }
 
     public void OnGameInit()

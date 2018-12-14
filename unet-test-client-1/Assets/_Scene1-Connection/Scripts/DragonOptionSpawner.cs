@@ -7,9 +7,12 @@ public class DragonOptionSpawner : MonoBehaviour {
     public ContainerSet DragonOptionContainers;
     public ObjectPool DragonOptionPool;
 
+
 	// Use this for initialization
 	void Start () {
-		
+
+        if (DragonCache.Instance.Ready && DragonOptionContainers.AreAllContainersEmpty())
+            PopulateContainersFromLeftToRight();
 	}
 	
 	// Update is called once per frame
@@ -24,7 +27,7 @@ public class DragonOptionSpawner : MonoBehaviour {
 
         dragonItem.Initialize(dragon);
 
-        dragonPF.transform.parent = container.transform;
+        dragonPF.transform.SetParent(container.transform, false);
         dragonPF.transform.localPosition = Vector3.zero;
         dragonPF.gameObject.SetActive(true);
     }
@@ -55,7 +58,6 @@ public class DragonOptionSpawner : MonoBehaviour {
         if (sortedContainers.Count > 0 && !sortedContainers[0].IsEmpty)
         {
             var firstOption = sortedContainers[0].transform.GetChild(0).gameObject;
-
             firstOption.GetComponent<Clickable>().ClickedEvent.Invoke(firstOption);
         }
     }

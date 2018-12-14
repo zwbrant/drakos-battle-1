@@ -13,7 +13,8 @@ public class Client : ManagedBehaviour<Client> {
     public StringVariable IPAddress;
     public StringVariable Port;
 
-    public ClientGameState OnConnectedState;
+    public Event OnConnectedEvent;
+    public Event OnDisconnectedEvent;
 
     public GameInstanceManager GameInstance;
     public GameEventDispatcher EventDispatcher;
@@ -59,17 +60,22 @@ public class Client : ManagedBehaviour<Client> {
         }
 
         _connectionId = NetworkTransport.Connect(_hostId, IPAddress.Value, int.Parse(Port.Value), 0, out _error);
-        if ((NetworkError)_error != NetworkError.Ok)
-        {
-            //Output this message in the console with the Network Error
-            Debug.Log("There was this error : " + (NetworkError)_error);
-        }
-        //Otherwise if no errors occur, output this message to the console
+        if (_error != 0)
+            Debug.Log((NetworkError)_error);
         else
         {
             IsOnline = true;
-
+            OnConnectedEvent.Raise();
         }
+    
+    }
+
+    public void Disconnect()
+    {
+        NetworkTransport.Disconnect(_hostId, _connectionId, out _error);
+        if (_error != 0)
+            Debug.Log((NetworkError)_error);
+
     }
 
     private void UpdateMessagePump()
@@ -93,6 +99,8 @@ public class Client : ManagedBehaviour<Client> {
                 break;
             case NetworkEventType.DisconnectEvent:
                 Debug.Log(string.Format("Disconnected from game server", cnnId));
+                IsOnline = false;
+                OnDisconnectedEvent.Raise();
                 break;
             case NetworkEventType.DataEvent:
                 NetMsg netMsg = MsgSerializer.DeserializeNetMsg(dataBuffer);
@@ -119,6 +127,8 @@ public class Client : ManagedBehaviour<Client> {
 
     private void OnDisconnect(int cnnId, int channelId, int hostId, int error)
     {
+        SceneManager.LoadScene("Battle");
+
         Debug.Log("Disconnected from Server");
         PlayerManager.SetDisconnected();
         IsOnline = false;

@@ -21,4 +21,14 @@ public class ContainerSet : RuntimeSet<ContainerItem> {
         else
             return items.First();
     }
+
+    public bool AreAllContainersEmpty()
+    {
+        foreach(ContainerItem item in Items)
+        {
+            if (!item.IsEmpty)
+                return false;
+        }
+        return true;
+    }
 }
