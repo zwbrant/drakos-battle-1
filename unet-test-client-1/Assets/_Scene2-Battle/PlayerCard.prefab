@@ -57,7 +57,7 @@ GameObject:
   - component: {fileID: 114972054978812924}
   - component: {fileID: 114882802215507288}
   m_Layer: 5
-  m_Name: HandCard
+  m_Name: PlayerCard
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -251,7 +251,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 96443fdbd498e134fb18314c5bfd04f5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  EnabledCards: {fileID: 11400000, guid: 1ee71435848324a449929e9c8d9ada07, type: 2}
+  Pool: {fileID: 0}
+  EnabledCards: {fileID: 11400000, guid: be8c068b09f50074c8d4b8a5a41ef8c6, type: 2}
   DisabledCards: {fileID: 11400000, guid: 048afe50879d9984abdd1748e48d0c74, type: 2}
   Name: {fileID: 114160537876465344}
   Sprite: {fileID: 114808133729952442}
@@ -398,7 +399,7 @@ RectTransform:
   m_GameObject: {fileID: 1484271892989992}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.8383995, y: 0.8383995, z: 0.8383995}
+  m_LocalScale: {x: 1.2102334, y: 1.2102334, z: 1.2102334}
   m_Children:
   - {fileID: 224059072674193868}
   - {fileID: 224667117055186202}
@@ -409,7 +410,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -356, y: -68.7}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 100, y: 153}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!224 &224667117055186202

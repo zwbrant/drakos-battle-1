@@ -10,13 +10,13 @@ public class DragonOptionItem : MonoBehaviour {
 
     public UnityStringEvent DragonSelectedEvent;
 
-    public Dragon Dragon { get; private set; }
-
     public Text Name;
     public Image Sprite;
     public Text Hp;
     public Text Attack;
     public Text Energy;
+
+    public Dragon Dragon { get; private set; }
 
     // Use this for initialization
     void Start () {
@@ -28,7 +28,7 @@ public class DragonOptionItem : MonoBehaviour {
 		
 	}
 
-    public void Initialize(Dragon dragon)
+    public void SetDragon(Dragon dragon)
     {
         Dragon = dragon;
 

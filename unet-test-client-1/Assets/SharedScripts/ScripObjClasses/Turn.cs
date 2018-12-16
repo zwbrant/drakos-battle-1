@@ -9,7 +9,7 @@ public class Turn : ScriptableObject
 {
     public bool HasBeenConsumed { get; set; }
 
-    public byte TurnNumber { get; set; }
+    public byte? TurnNumber { get; set; }
     public PlayerOrdinal PlayerNumber { get; set; }
 
     public DragonStateUpdate DragonUpdate { get; set; }

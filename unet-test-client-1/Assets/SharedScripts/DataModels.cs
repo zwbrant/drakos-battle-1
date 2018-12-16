@@ -47,6 +47,7 @@ public class DragonStateUpdate
 {
     public string NewDragonEquip { get; set; }
     public sbyte? DragonHpChange { get; set; }
+    public sbyte? DragonAttackChange { get; set; }
     public sbyte? DragonEnergyChange { get; set; }
 }
 
@@ -144,7 +145,8 @@ public class Card
 public class Circle
 {
     public byte CircleIndex { get; set; }
-    public byte Color { get; set; }
+    public byte Color1 { get; set; }
+    public byte? Color2 { get; set; }
     public PlacedCard Card { get; set; }
 }
 
@@ -152,9 +154,10 @@ public class Circle
 public class CircleUpdate
 {
     public byte CircleIndex { get; set; }
-    public byte? NewColor { get; set; }
+    public byte? NewColor1 { get; set; }
+    public byte? NewColor2 { get; set; }
     public PlacedCard NewCard { get; set; }
-    public sbyte? CardHpChange { get; set; }
+    public sbyte? CardPowerChange { get; set; }
 }
 
 [Serializable]
@@ -169,7 +172,7 @@ public class PlacedDragon
 public class PlacedCard
 {
     public string CardId { get; set; }
-    public byte HP { get; set; }
+    public byte Power { get; set; }
 }
 
 [Serializable]

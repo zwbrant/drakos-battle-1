@@ -28,4 +28,15 @@ public class DragonCache : Cache<Dragon> {
 
         return Instance.Objects.Exists(item => item.id == id);
     }
+
+    public static Dragon GetDragonByID(string id)
+    {
+        if (!Instance.Ready)
+        {
+            Debug.LogError(string.Format("DragonCache Not Ready: Cannot find Dragon {0}", id));
+            return null;
+        }
+
+        return Instance.Objects.Find(item => item.id == id);
+    }
 }

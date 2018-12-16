@@ -3,48 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class OldGameInstanceManager : ManagedBehaviour<OldGameInstanceManager> {
-
-    public GameInstance Game { get; private set; }
-
-    public override void Init()
-    {
-        ResetGameInstance();
-    }
-
-    public virtual void ResetGameInstance()
-    {
-        Game = new GameInstance
-        {
-            Player1Setup = new PlayerGameInstance(),
-            Player2Setup = new PlayerGameInstance()
-        };
-    }
-
-
-
-    #region Setters
-
-    public void P1_SetHandCards(string[] cards)
-    {
-        Game.Player1Setup.HandCards = cards;
-    }
-    public void P2_SetHandCards(string[] cards)
-    {
-        Game.Player2Setup.HandCards = cards;
-    }
-
-    public void P1_SetCircles(Circle[] circles)
-    {
-        Game.Player1Setup.Circles = circles;
-    }
-    public void P2_SetCircles(Circle[] circles)
-    {
-        Game.Player1Setup.Circles = circles;
-    }
-    #endregion
-}
-
 public class GameInstanceManager : MonoBehaviour
 {
     public GameInstance Game { get; private set; }
@@ -53,6 +11,13 @@ public class GameInstanceManager : MonoBehaviour
 
     public Stack<Turn> P1Turns { get; private set; }
     public Stack<Turn> P2Turns { get; private set; }
+
+    public Turn P1InitialSetup { get; private set; }
+    public Turn P2InitialSetup { get; private set; }
+    public Turn P1ArrangeTurn { get; private set; }
+    public Turn P2ArrangeTurn { get; private set; }
+
+
 
     public Turn CurrPlayerTurn;
     public Turn CurrOponentTurn;
@@ -71,11 +36,8 @@ public class GameInstanceManager : MonoBehaviour
 
         Deck = deck;
 
-        Turn initTurnP1 = CreateInitTurn(p1, PlayerOrdinal.Player1);
-        P1Turns.Push(initTurnP1);
-
-        Turn initTurnP2 = CreateInitTurn(p2, PlayerOrdinal.Player2);
-        P2Turns.Push(initTurnP2);
+        P1InitialSetup = CreateInitTurn(p1, PlayerOrdinal.Player1);
+        P2InitialSetup = CreateInitTurn(p2, PlayerOrdinal.Player2);
     }
 
     private Turn CreateInitTurn(PlayerInfo playerInfo, PlayerOrdinal playerNumber)
@@ -117,7 +79,6 @@ public class GameInstanceManager : MonoBehaviour
     }
 
 
-
     #region Static game managment functions
     public static CircleUpdate CreateEmptyCircleUpdate(int index)
     {
@@ -127,10 +88,10 @@ public class GameInstanceManager : MonoBehaviour
         System.Random random = new System.Random();
         CircleColor randColor = (CircleColor)values.GetValue(random.Next(values.Length));
 
-        update.NewColor = (byte)randColor;
+        update.NewColor1 = (byte)randColor;
         update.CircleIndex = (byte)index;
         update.NewCard = null;
-        update.CardHpChange = null;
+        update.CardPowerChange = null;
 
         return update;
     }
@@ -152,12 +113,12 @@ public class GameInstanceManager : MonoBehaviour
 
     public static Circle UpdateCircle(Circle circle, CircleUpdate update)
     {
-        if (update.NewColor != null)
-            { circle.Color = (byte)update.NewColor; }
+        if (update.NewColor1 != null)
+            { circle.Color1 = (byte)update.NewColor1; }
         if (update.NewCard != null)
             { circle.Card = update.NewCard; }
-        else if (update.CardHpChange != null)
-            { circle.Card.HP = (byte)((int)circle.Card.HP + (int)update.CardHpChange); }
+        else if (update.CardPowerChange != null)
+            { circle.Card.Power = (byte)((int)circle.Card.Power + (int)update.CardPowerChange); }
         return circle;
     }
     #endregion

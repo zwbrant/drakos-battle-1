@@ -163,9 +163,8 @@ public class Client : ManagedBehaviour<Client> {
         }
     }
 
-    private void OnGameUpdate(GameUpdateNetMsg updateMsg)
+    private void OnGameUpdate (GameUpdateNetMsg updateMsg)
     {
-        Debug.LogWarning("WHITE BOI");
         bool isOpponentTurn = (updateMsg.PlayerNumber != PlayerManager.PlayerNumber);
         // consume data
         switch (updateMsg.OP)
@@ -182,9 +181,6 @@ public class Client : ManagedBehaviour<Client> {
             default:
                 return;
         }
-
-        
-
     }
 
 

@@ -84,12 +84,12 @@ public class Server : ManagedBehaviour<Server> {
     {
         Debug.Log(string.Format("User {0} has connected", cnnId));
 
-        // succesfully added new player and both players are connected
-        if (AddNewPlayer(cnnId) && Player1.IsConnected && Player2.IsConnected)
+        // succesfully added new player, tell them their player number
+        if (AddNewPlayer(cnnId))
         {
-
+            var msg = new SetPlayerNumberNetMsg() { PlayerNumber = GetPlayer(cnnId).PlayerNumber  };
+            SendToClient(cnnId, msg);
         }
-
     }
 
     private void OnDisconnect(int cnnId, int channelId, int recHostId)
@@ -113,13 +113,9 @@ public class Server : ManagedBehaviour<Server> {
         }
 
         if (!Player1.IsConnected)
-        {
             Player1.SetConnected(cnnId, PlayerOrdinal.Player1);
-        }
         else
-        {
             Player2.SetConnected(cnnId, PlayerOrdinal.Player2);
-        }
         return true;
     }
 
@@ -136,7 +132,6 @@ public class Server : ManagedBehaviour<Server> {
                 break;
             default:
                 break;
-
         }
     }
 
@@ -173,10 +168,10 @@ public class Server : ManagedBehaviour<Server> {
 
         Debug.Log("Sending Initial UPDATES");
 
-        SendTurnToPlayer(GameInstance.P1Turns.Peek(), Player1);
-        SendTurnToPlayer(GameInstance.P2Turns.Peek(), Player1);
-        SendTurnToPlayer(GameInstance.P1Turns.Peek(), Player2);
-        SendTurnToPlayer(GameInstance.P2Turns.Peek(), Player2);
+        SendTurnToPlayer(GameInstance.P1InitialSetup, Player1);
+        SendTurnToPlayer(GameInstance.P2InitialSetup, Player1);
+        SendTurnToPlayer(GameInstance.P1InitialSetup, Player2);
+        SendTurnToPlayer(GameInstance.P2InitialSetup, Player2);
     }
 
     // take a turn object, turn it into 3 seperate update net messages, then send them off

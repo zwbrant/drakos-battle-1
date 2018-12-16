@@ -25,7 +25,7 @@ public class DragonOptionSpawner : MonoBehaviour {
         var dragonPF = DragonOptionPool.GetObject();
         var dragonItem = dragonPF.GetComponent<DragonOptionItem>();
 
-        dragonItem.Initialize(dragon);
+        dragonItem.SetDragon(dragon);
 
         dragonPF.transform.SetParent(container.transform, false);
         dragonPF.transform.localPosition = Vector3.zero;
