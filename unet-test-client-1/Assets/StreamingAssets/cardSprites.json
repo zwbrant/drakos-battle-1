@@ -1,0 +1,122 @@
+[
+  {
+    "id": 1,
+    "spriteFile": "ancientTortoise"
+  },
+  {
+    "id": 2,
+    "spriteFile": "witch"
+  },  
+  {
+    "id": 3,
+    "spriteFile": "ancientTortoise"
+  },  
+  {
+    "id": 4,
+    "spriteFile": "headlessFish"
+  },  
+  {
+    "id": 5,
+    "spriteFile": "blueBlast"
+  },  
+  {
+    "id": 6,
+    "spriteFile": "witch"
+  },  
+  {
+    "id": 7,
+    "spriteFile": "ancientTortoise"
+  },  
+  {
+    "id": 8,
+    "spriteFile": "blueBlast"
+  },  
+  {
+    "id": 9,
+    "spriteFile": "headlessFish"
+  },
+    {
+    "id": 10,
+    "spriteFile": "witch"
+  },
+  {
+    "id": 11,
+    "spriteFile": "headlessFish"
+  },  
+  {
+    "id": 12,
+    "spriteFile": "witch"
+  },  
+  {
+    "id": 13,
+    "spriteFile": "ancientTortoise"
+  },  
+  {
+    "id": 14,
+    "spriteFile": "blueBlast"
+  },  
+  {
+    "id": 15,
+    "spriteFile": "giraldo"
+  },  
+  {
+    "id": 16,
+    "spriteFile": "witch"
+  },  
+  {
+    "id": 17,
+    "spriteFile": "headlessFish"
+  },  
+  {
+    "id": 18,
+    "spriteFile": "ancientTortoise"
+  },
+    {
+    "id": 19,
+    "spriteFile": "giraldo"
+  },
+  {
+    "id": 20,
+    "spriteFile": "blueBlast"
+  },  
+  {
+    "id": 21,
+    "spriteFile": "witch"
+  },  
+  {
+    "id": 22,
+    "spriteFile": "headlessFish"
+  },  
+  {
+    "id": 23,
+    "spriteFile": "witch"
+  },  
+  {
+    "id": 24,
+    "spriteFile": "ancientTortoise"
+  },  
+  {
+    "id": 25,
+    "spriteFile": "witch"
+  },  
+  {
+    "id": 26,
+    "spriteFile": "ancientTortoise"
+  },  
+  {
+    "id": 27,
+    "spriteFile": "witch"
+  },  
+  {
+    "id": 28,
+    "spriteFile": "blueBlast"
+  },  
+  {
+    "id": 29,
+    "spriteFile": "headlessFish"
+  },  
+  {
+    "id": 30,
+    "spriteFile": "witch"
+  }
+]

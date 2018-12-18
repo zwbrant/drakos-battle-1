@@ -2331,56 +2331,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8bc04ff27df1726498f62844d473573a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GameStateEvent:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 11400000, guid: e4a2bbe4af3f8874dbef60273268769c, type: 2}
-        m_MethodName: Raise
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-    m_TypeName: UnityGameStateEvent, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
-      PublicKeyToken=null
-  PlayerTurnReceivedEvent:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 11400000, guid: 54e9648715596ee409f347e896775d3c, type: 2}
-        m_MethodName: Raise
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
-  OpponentTurnReceivedEvent:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 11400000, guid: 90605a80160e83447be904f3ad8424f6, type: 2}
-        m_MethodName: Raise
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
+  GameStateEvent: {fileID: 11400000, guid: e4a2bbe4af3f8874dbef60273268769c, type: 2}
+  PlayerTurnReceivedEvent: {fileID: 11400000, guid: 54e9648715596ee409f347e896775d3c,
+    type: 2}
+  EnemyTurnReceivedEvent: {fileID: 11400000, guid: 90605a80160e83447be904f3ad8424f6,
+    type: 2}
   CurrPlayerTurn: {fileID: 11400000, guid: 49d650ce98fda9a419921bd821f05a56, type: 2}
-  CurrOpponentTurn: {fileID: 11400000, guid: 12b10f88805a42d48af782525b1798d1, type: 2}
+  CurrEnemyTurn: {fileID: 11400000, guid: 12b10f88805a42d48af782525b1798d1, type: 2}
 --- !u!224 &1860531724 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 224414283979899170, guid: 56b75cd52bf500341b13d63d6b6b4ebe,
@@ -2396,6 +2353,7 @@ GameObject:
   - component: {fileID: 1927011454}
   - component: {fileID: 1927011453}
   - component: {fileID: 1927011455}
+  - component: {fileID: 1927011456}
   m_Layer: 0
   m_Name: Caches
   m_TagString: Untagged
@@ -2472,6 +2430,24 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+--- !u!114 &1927011456
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1927011452}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 40bc3bf0541a4194f908bd771129c8fd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  JsonPathInStreamingAssets: cardSprites
+  PathIsFolder: 0
+  ReadyEvent:
+    m_PersistentCalls:
+      m_Calls: []
     m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
 --- !u!1 &1931256498

@@ -51,10 +51,17 @@ public class GameInstanceManager : MonoBehaviour
         };
 
         // create empty circles
+
+        Array values = Enum.GetValues(typeof(CircleColor));
+        System.Random random = new System.Random();
+
         CircleUpdate[] circles = new CircleUpdate[6];
         for (int i = 0; i < 6; i++)
         {
-            circles[i] = CreateEmptyCircleUpdate(i);
+
+            circles[i] = CreateEmptyCircleUpdate(i,
+                (CircleColor)values.GetValue(random.Next(values.Length)),
+                (CircleColor)values.GetValue(random.Next(values.Length)));
         }
 
         // draw initial cards
@@ -71,24 +78,14 @@ public class GameInstanceManager : MonoBehaviour
         return initTurn;
     }
 
-    private void ApplyStateUpdate(PlayerOrdinal player, PlayerStateUpdate update)
-    {
-        var playerSetup = (player == PlayerOrdinal.Player1) ? Game.Player1Setup : Game.Player2Setup;
-
-        playerSetup.Circles = UpdateCircles(playerSetup.Circles, update.CircleChanges);
-    }
-
 
     #region Static game managment functions
-    public static CircleUpdate CreateEmptyCircleUpdate(int index)
+    public static CircleUpdate CreateEmptyCircleUpdate(int index, CircleColor rightColor, CircleColor leftColor)
     {
         CircleUpdate update = new CircleUpdate();
 
-        Array values = Enum.GetValues(typeof(CircleColor));
-        System.Random random = new System.Random();
-        CircleColor randColor = (CircleColor)values.GetValue(random.Next(values.Length));
-
-        update.NewColor1 = (byte)randColor;
+        update.RightColor = (byte)rightColor;
+        update.LeftColor = (byte)leftColor;
         update.CircleIndex = (byte)index;
         update.NewCard = null;
         update.CardPowerChange = null;
@@ -96,31 +93,6 @@ public class GameInstanceManager : MonoBehaviour
         return update;
     }
 
-    public static Circle[] UpdateCircles(Circle[] circles, CircleUpdate[] updates)
-    {
-        for (int i = 0; i < circles.Length; i++)
-        {
-            for (int x = 0; x < updates.Length; x++)
-            {
-                if (circles[i].CircleIndex == updates[x].CircleIndex)
-                {
-                    circles[i] = UpdateCircle(circles[i], updates[x]);
-                }
-            }
-        }
-        return circles;
-    }
-
-    public static Circle UpdateCircle(Circle circle, CircleUpdate update)
-    {
-        if (update.NewColor1 != null)
-            { circle.Color1 = (byte)update.NewColor1; }
-        if (update.NewCard != null)
-            { circle.Card = update.NewCard; }
-        else if (update.CardPowerChange != null)
-            { circle.Card.Power = (byte)((int)circle.Card.Power + (int)update.CardPowerChange); }
-        return circle;
-    }
     #endregion
 }
 

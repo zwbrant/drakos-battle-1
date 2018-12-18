@@ -270,6 +270,7 @@ GameObject:
   m_Component:
   - component: {fileID: 492585593}
   - component: {fileID: 492585594}
+  - component: {fileID: 492585595}
   m_Layer: 0
   m_Name: Caches
   m_TagString: Untagged
@@ -302,6 +303,24 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   JsonPathInStreamingAssets: cards
+  PathIsFolder: 0
+  ReadyEvent:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+--- !u!114 &492585595
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 492585592}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0154be7c09d3d7b4a8c5e3df9ae835b1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  JsonPathInStreamingAssets: dragons
   PathIsFolder: 0
   ReadyEvent:
     m_PersistentCalls:

@@ -8,7 +8,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6dd5b690336fac64e857f6237ad0d8a9, type: 3}
-  m_Name: P2HandCardSet
+  m_Script: {fileID: 11500000, guid: 7d75b019d5303e34494edd19ea810406, type: 3}
+  m_Name: EnemyCircles
   m_EditorClassIdentifier: 
   Items: []

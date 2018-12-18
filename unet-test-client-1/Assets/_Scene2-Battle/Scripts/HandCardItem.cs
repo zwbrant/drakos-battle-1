@@ -6,7 +6,6 @@ using UnityEngine.UI;
 
 public class HandCardItem : PooledObject {
     public HandCardSet EnabledCards;
-    public HandCardSet DisabledCards;
 
     public Card Card { get; private set; }
 
@@ -24,25 +23,28 @@ public class HandCardItem : PooledObject {
     {
         Card = card;
 
-        Name.text = Card.name;
-        AttackPower.text = Card.power.ToString();
-        EnergyCost.text = Card.cost.ToString();
+        if (Name != null)
+            Name.text = Card.name;
+        if (AttackPower != null)
+            AttackPower.text = Card.power.ToString();
+        if (EnergyCost != null)
+            EnergyCost.text = Card.cost.ToString();
+        if (Sprite != null)
+        {
+            string spritePath = "Textures/" + CardSpriteCache.Instance.Objects.Find(item => item.id == card.id).spriteFile;
+            Sprite.sprite = Resources.Load<Sprite>(spritePath);
+        }
 
-        //string spritePath = "Textures/" + Card.spriteFile;
-        //Sprite.sprite = Resources.Load<Sprite>(spritePath);
+
     }
 
     private void OnEnable()
     {
         EnabledCards.Add(this);
-
-        DisabledCards.Remove(this);
     }
 
     private void OnDisable()
     {
-        DisabledCards.Add(this);
-
         EnabledCards.Remove(this);
     }
 }

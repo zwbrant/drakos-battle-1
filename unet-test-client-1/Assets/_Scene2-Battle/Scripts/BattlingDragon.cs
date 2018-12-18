@@ -16,17 +16,18 @@ public class BattlingDragon : MonoBehaviour {
     public Turn TurnSource;
 
     public Dragon Dragon { get; private set; }
-    public int CurrHp { get; private set; }
-    public int CurrAttack { get; private set; }
-    public int CurrEnergy { get; private set; }
+    public PlacedDragon DragonState { get; private set; }
 
 
     public void SetDragon(Dragon dragon)
     {
         Dragon = dragon;
-        CurrHp = dragon.health;
-        CurrAttack = dragon.attack;
-        CurrEnergy = dragon.energy;
+        DragonState = new PlacedDragon();
+
+        DragonState.DragonId = dragon.id;
+        DragonState.HP = (byte)dragon.health;
+        DragonState.Attack = (byte)dragon.attack;
+        DragonState.Energy = (byte)dragon.energy;
 
         RefreshTextComponents();
         RefreshSpriteComponent();
@@ -46,11 +47,11 @@ public class BattlingDragon : MonoBehaviour {
         }
 
         if (update.DragonHpChange != null)
-            CurrHp += (int)update.DragonHpChange;
+            DragonState.HP += (byte)update.DragonHpChange;
         if (update.DragonEnergyChange != null)
-            CurrEnergy += (int)update.DragonEnergyChange;
+            DragonState.Energy += (byte)update.DragonEnergyChange;
         if (update.DragonAttackChange != null)
-            CurrAttack += (int)update.DragonAttackChange;
+            DragonState.Attack += (byte)update.DragonAttackChange;
 
         RefreshTextComponents();
     } 
@@ -58,9 +59,9 @@ public class BattlingDragon : MonoBehaviour {
     public void RefreshTextComponents()
     {
         Name.text = Dragon.name;
-        Hp.text = CurrHp.ToString();
-        Attack.text = CurrAttack.ToString();
-        Energy.text = CurrEnergy.ToString();
+        Hp.text = DragonState.HP.ToString();
+        Attack.text = DragonState.Attack.ToString();
+        Energy.text = DragonState.Energy.ToString();
     }
 
     public void RefreshSpriteComponent()

@@ -1,8 +1,10 @@
-﻿using System.Collections;
+﻿using RoboRyanTron.Unite2017.Sets;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CircleItem : PooledObject {
+[CreateAssetMenu]
+public class CircleSet : RuntimeSet<CircleItem> {
 
 	// Use this for initialization
 	void Start () {
@@ -13,6 +15,4 @@ public class CircleItem : PooledObject {
 	void Update () {
 		
 	}
-
-
 }

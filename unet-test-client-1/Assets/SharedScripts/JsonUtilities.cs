@@ -35,9 +35,9 @@ public static class JsonUtilities {
     public static T DeserializeFile<T>(string filePath) {
         if (File.Exists(filePath))
         {
+            JsonSerializer serializer = new JsonSerializer();
             using (StreamReader file = File.OpenText(@filePath))
             {
-                JsonSerializer serializer = new JsonSerializer();
                 T obj = (T)serializer.Deserialize(file, typeof(T));
                 return obj;
             }

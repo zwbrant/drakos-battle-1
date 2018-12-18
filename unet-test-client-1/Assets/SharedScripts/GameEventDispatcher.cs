@@ -8,80 +8,80 @@ public class GameEventDispatcher : MonoBehaviour
 {
     public PlayerOrdinal LocalPlayerNumber { get; set; }
 
-    public UnityGameStateEvent GameStateEvent;
+    public GameStateEvent GameStateEvent;
 
-    public UnityEvent PlayerTurnReceivedEvent;
-    public UnityEvent OpponentTurnReceivedEvent;
+    public Event PlayerTurnReceivedEvent;
+    public Event EnemyTurnReceivedEvent;
 
     public Turn CurrPlayerTurn;
-    public Turn CurrOpponentTurn;
+    public Turn CurrEnemyTurn;
 
     public void Start()
     {
-        ResetTurn(ref CurrOpponentTurn);
+        ResetTurn(ref CurrEnemyTurn);
         ResetTurn(ref CurrPlayerTurn);
     }
 
     public void Init(PlayerOrdinal localPlayerNumber)
     {
-        ResetTurn(ref CurrOpponentTurn);
+        ResetTurn(ref CurrEnemyTurn);
         ResetTurn(ref CurrPlayerTurn);
 
         CurrPlayerTurn.PlayerNumber = localPlayerNumber;
-        CurrOpponentTurn.PlayerNumber =
+        CurrEnemyTurn.PlayerNumber =
             (localPlayerNumber == PlayerOrdinal.Player1) ? PlayerOrdinal.Player2 : PlayerOrdinal.Player2;
 
     }
 
-    public void ProcessDragonUpdate(DragonStateUpdate update, bool isOpponentTurn)
+    public void ProcessDragonUpdate(DragonStateUpdate update, bool isEnemyTurn)
     {
-        Turn turn = (isOpponentTurn) ? CurrOpponentTurn : CurrPlayerTurn;
+        Turn turn = (isEnemyTurn) ? CurrEnemyTurn : CurrPlayerTurn;
         if (turn.HasBeenConsumed)
             ResetTurn(ref turn);
 
         turn.DragonUpdate = update;
         turn.HasBeenConsumed = false;
 
-        TryRaiseTurnEvent(isOpponentTurn); 
+        TryRaiseTurnEvent(isEnemyTurn); 
     }
 
-    public void ProcessCirclesUpdate(CirclesStateUpdate update, bool isOpponentTurn)
+    public void ProcessCirclesUpdate(CirclesStateUpdate update, bool isEnemyTurn)
     {
-        Turn turn = (isOpponentTurn) ? CurrOpponentTurn : CurrPlayerTurn;
+        Turn turn = (isEnemyTurn) ? CurrEnemyTurn : CurrPlayerTurn;
         if (turn.HasBeenConsumed)
             ResetTurn(ref turn);
 
         turn.CirclesUpdate = update;
         turn.HasBeenConsumed = false;
 
-        TryRaiseTurnEvent(isOpponentTurn);
+        TryRaiseTurnEvent(isEnemyTurn);
     }
 
-    public void ProcessCardsUpdate(CardsStateUpdate update, bool isOpponentTurn)
+    public void ProcessCardsUpdate(CardsStateUpdate update, bool isEnemyTurn)
     {
-        Turn turn = (isOpponentTurn) ? CurrOpponentTurn : CurrPlayerTurn;
+        Turn turn = (isEnemyTurn) ? CurrEnemyTurn : CurrPlayerTurn;
         if (turn.HasBeenConsumed)
             ResetTurn(ref turn);
 
         turn.CardsUpdate = update;
         turn.HasBeenConsumed = false;
 
-        TryRaiseTurnEvent(isOpponentTurn);
+        TryRaiseTurnEvent(isEnemyTurn);
     }
 
-    private void TryRaiseTurnEvent(bool isOpponentTurn)
+    private void TryRaiseTurnEvent(bool isEnemyTurn)
     {
-        Turn turn = (isOpponentTurn) ? CurrOpponentTurn : CurrPlayerTurn;
+        Turn turn = (isEnemyTurn) ? CurrEnemyTurn : CurrPlayerTurn;
 
         if (!turn.HasBeenConsumed && 
             turn.DragonUpdate != null && 
             turn.CirclesUpdate != null &&
             turn.CardsUpdate != null)
         {
-            if (isOpponentTurn)
-                OpponentTurnReceivedEvent.Invoke();
+            if (isEnemyTurn)
+                EnemyTurnReceivedEvent.Raise();
             else
-                PlayerTurnReceivedEvent.Invoke();
+                PlayerTurnReceivedEvent.Raise();
 
             turn.HasBeenConsumed = true;
         }
@@ -90,7 +90,7 @@ public class GameEventDispatcher : MonoBehaviour
 
     public void OnGameInit()
     {
-        GameStateEvent.Invoke(ClientGameState.SetupPhase);
+        GameStateEvent.Raise(ClientGameState.SetupPhase);
     }
 
     private void ResetTurn(ref Turn turn)

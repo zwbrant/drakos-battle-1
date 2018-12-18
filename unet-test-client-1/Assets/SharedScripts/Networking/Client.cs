@@ -165,18 +165,18 @@ public class Client : ManagedBehaviour<Client> {
 
     private void OnGameUpdate (GameUpdateNetMsg updateMsg)
     {
-        bool isOpponentTurn = (updateMsg.PlayerNumber != PlayerManager.PlayerNumber);
+        bool isEnemyTurn = (updateMsg.PlayerNumber != PlayerManager.PlayerNumber);
         // consume data
         switch (updateMsg.OP)
         {
             case NetOP.DragonUpdate:
-                EventDispatcher.ProcessDragonUpdate(((DragonUpdateNetMsg)updateMsg).DragonUpdate, isOpponentTurn);
+                EventDispatcher.ProcessDragonUpdate(((DragonUpdateNetMsg)updateMsg).DragonUpdate, isEnemyTurn);
                 break;
             case NetOP.CirclesUpdate:
-                EventDispatcher.ProcessCirclesUpdate(((CirclesUpdateNetMsg)updateMsg).CirclesUpdate, isOpponentTurn);
+                EventDispatcher.ProcessCirclesUpdate(((CirclesUpdateNetMsg)updateMsg).CirclesUpdate, isEnemyTurn);
                 break;
             case NetOP.CardsUpdate:
-                EventDispatcher.ProcessCardsUpdate(((CardsUpdateNetMsg)updateMsg).CardsUpdate, isOpponentTurn);
+                EventDispatcher.ProcessCardsUpdate(((CardsUpdateNetMsg)updateMsg).CardsUpdate, isEnemyTurn);
                 break;
             default:
                 return;

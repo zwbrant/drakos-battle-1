@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public enum ClientGameState : byte {
-    AwaitingOpponentJoin,
+    AwaitingEnemyJoin,
     SetupPhase,
     PlayerSetupReady,
     PlayerTurn,
     PlayerAttack,
-    OpponentTurn,
-    OpponentAttack
+    EnemyTurn,
+    EnemyAttack
 }

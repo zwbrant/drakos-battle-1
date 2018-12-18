@@ -145,17 +145,16 @@ public class Card
 public class Circle
 {
     public byte CircleIndex { get; set; }
-    public byte Color1 { get; set; }
-    public byte? Color2 { get; set; }
-    public PlacedCard Card { get; set; }
+    public byte RightColor { get; set; }
+    public byte? LeftColor { get; set; }
 }
 
 [Serializable]
 public class CircleUpdate
 {
     public byte CircleIndex { get; set; }
-    public byte? NewColor1 { get; set; }
-    public byte? NewColor2 { get; set; }
+    public byte? RightColor { get; set; }
+    public byte? LeftColor { get; set; }
     public PlacedCard NewCard { get; set; }
     public sbyte? CardPowerChange { get; set; }
 }
@@ -165,6 +164,7 @@ public class PlacedDragon
 {
     public string DragonId { get; set; }
     public byte HP { get; set; }
+    public byte Attack { get; set; }
     public byte Energy { get; set; }
 }
 
@@ -183,5 +183,15 @@ public enum CircleColor : byte
     Yellow,
     Blue
 }
+
+[Serializable]
+public class IdSpriteAssociation
+{
+    public string id { get; set; }
+    public string spriteFile { get; set; }
+}
+
+
+
 
 #endregion
